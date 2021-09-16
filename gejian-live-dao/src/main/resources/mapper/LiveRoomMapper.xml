@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gejian.live.dao.mapper.LiveRoomMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gejian.live.dao.entity.LiveRoom">
+        <id column="id" property="id" />
+        <result column="room_id" property="roomId" />
+        <result column="is_beautiful_number" property="isBeautifulNumber" />
+        <result column="is_occupy" property="isOccupy" />
+        <result column="deleted" property="deleted" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="version" property="version" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, room_id, is_beautiful_number, is_occupy, deleted, create_time, update_time, version
+    </sql>
+
+	<update id="updateByVersionAndId">
+        UPDATE substance_room sr
+        SET sr.is_occupy = 1,
+        sr.version = sr.version + 1
+        WHERE
+            sr.version = #{version}
+            AND sr.id = #{id}
+    </update>
+
+
+</mapper>
