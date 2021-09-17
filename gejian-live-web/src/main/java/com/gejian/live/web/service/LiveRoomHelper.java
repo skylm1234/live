@@ -3,13 +3,16 @@ package com.gejian.live.web.service;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gejian.common.core.constant.SecurityConstants;
+import com.gejian.common.core.exception.BusinessException;
 import com.gejian.leaf.client.feign.RemoteLeafService;
+import com.gejian.live.common.enmus.error.LiveRoomErrorCode;
 import com.gejian.live.dao.entity.LiveRoom;
 import com.gejian.live.web.event.LiveRoomEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -80,7 +83,7 @@ public class LiveRoomHelper implements InitializingBean {
 			liveRoom.setVersion(1);
             try {
                 liveRoomService.save(liveRoom);
-            }catch (Exception e){
+            }catch (DuplicateKeyException e){
                 log.error("生成的房间号在数据库中存在===roomId[{}]",roomId);
             }
 
@@ -93,6 +96,7 @@ public class LiveRoomHelper implements InitializingBean {
      *
      */
     public void compensate(){
+    	retry=0;
         int count = liveRoomService.count(Wrappers.lambdaQuery(LiveRoom.class)
                 .eq(LiveRoom::getDeleted, false)
                 .eq(LiveRoom::getIsBeautifulNumber, false)
@@ -143,7 +147,7 @@ public class LiveRoomHelper implements InitializingBean {
         );
         if(Objects.isNull(one)){
             log.error("数据库中已没有多余的房间号了");
-            throw new RuntimeException("数据库中已没有多余的房间号了");
+            throw new BusinessException(LiveRoomErrorCode.ROOM_FULL_FAIL);
         }
         boolean update = liveRoomService.updateByVersionAndId(one);
         if(update){
