@@ -17,7 +17,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: gejian-live:${CICD_EXECUTION_SEQUENCE}
+      tag: gejian-live-web:${CICD_EXECUTION_SEQUENCE}
 - name: 部署
   steps:
   - applyYamlConfig:

@@ -3,22 +3,22 @@ apiVersion: apps/v1
 kind: Deployment
 #kind: StatefulSet
 metadata:
-  name: gejian-live
+  name: gejian-live-web
   namespace: gejian-business
 spec:
   selector:
     matchLabels:
-      app: gejian-live
+      app: gejian-live-web
   replicas: 1
   template:
     metadata:
       labels:
-        app: gejian-live
+        app: gejian-live-web
     spec:
       imagePullSecrets:
       - name: pipeline-docker-registry
       containers:
-      - name: gejian-live
+      - name: gejian-live-web
         image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
         env:
           - name: NACOS_HOST
