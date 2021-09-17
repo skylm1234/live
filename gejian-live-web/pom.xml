@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-log</artifactId>
-			<version>${gejian-common-core.version}</version>
+			<version>1.0.1</version>
 		</dependency>
 
 		<!--mybatis 模块-->

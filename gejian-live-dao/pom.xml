@@ -24,7 +24,10 @@
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-core</artifactId>
-			<version>${gejian-common-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 
 

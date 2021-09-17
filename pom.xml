@@ -33,7 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<gejian-common-core.version>1.0.1</gejian-common-core.version>
+		<gejian-common-core.version>1.0.3</gejian-common-core.version>
 		<live.version>1.0.0-SNAPSHOT</live.version>
 	</properties>
 
@@ -41,24 +41,41 @@
 	<modules>
 		<module>gejian-live-dao</module>
 		<module>gejian-live-web</module>
+		<module>gejian-live-common</module>
 	</modules>
 
-	<dependencies>
-		<!--Lombok-->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.20</version>
-		</dependency>
+	<dependencyManagement>
+		<dependencies>
+			<!--Lombok-->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>1.18.20</version>
+			</dependency>
 
-		<!--core 工具类-->
-		<dependency>
-			<groupId>com.gejian</groupId>
-			<artifactId>gejian-common-core</artifactId>
-			<version>${gejian-common-core.version}</version>
-		</dependency>
-
-	</dependencies>
+			<!--core 工具类-->
+			<dependency>
+				<groupId>com.gejian</groupId>
+				<artifactId>gejian-common-core</artifactId>
+				<version>${gejian-common-core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.11.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.12.0</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jayway.jsonpath</groupId>
+				<artifactId>json-path</artifactId>
+				<version>2.6.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
 
