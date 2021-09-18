@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-@Valid(type = {ValidType.PUSH,ValidType.PULL})
+@Valid(type = {ValidType.PUSH,ValidType.PULL},order = 4)
 public class TimestampValidator extends AbstractValidator{
 	@Override
 	public void valid(VerifyRequest request) {

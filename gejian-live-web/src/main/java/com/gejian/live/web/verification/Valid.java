@@ -13,4 +13,6 @@ import java.lang.annotation.*;
 public @interface Valid {
 
 	ValidType[] type();
+
+	int order() default 0;
 }

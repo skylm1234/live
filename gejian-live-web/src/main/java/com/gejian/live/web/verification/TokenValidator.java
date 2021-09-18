@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
  * @description：token校验
  */
 
-@Valid(type = {ValidType.PUSH,ValidType.PULL})
+@Valid(type = {ValidType.PUSH,ValidType.PULL},order = 3)
 @Service
 public class TokenValidator extends AbstractValidator{
 

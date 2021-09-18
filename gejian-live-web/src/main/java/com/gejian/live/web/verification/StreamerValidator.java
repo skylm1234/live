@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-@Valid(type = {ValidType.PUSH})
+@Valid(type = {ValidType.PUSH},order = 1)
 public class StreamerValidator extends AbstractValidator{
 	@Override
 	public void valid(VerifyRequest request) {
