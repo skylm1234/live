@@ -25,23 +25,27 @@ public class ServerComponent {
 	private int consolePort;
 
 	@Value("${gejian.live.server.stream:live}")
-	private String stream;
+	private String app;
 
 	private static final String RTMP_PREFIX = "rtmp://";
 
 	private static final String HTTP_PREFIX = "http://";
 
 
-	public String getRtmpUrl(String roomId){
-		return RTMP_PREFIX + host + ":" + rtmpPort + stream;
+	public String getRtmpUrl(){
+		return RTMP_PREFIX + host + ":" + rtmpPort + "/" + app;
 	}
 
 	public String getm3u8Url(String roomId){
-		return HTTP_PREFIX + host + ":" + httpPort + "/" + stream +  "/" + roomId + ".m3u8";
+		return HTTP_PREFIX + host + ":" + httpPort + "/" + app +  "/" + roomId + "/index.m3u8";
 	}
 
 	public String getConsoleUrl(){
 		return  HTTP_PREFIX + host + ":" + consolePort + "/console/";
+	}
+
+	public String getPictureUrl(String roomId,String fileName){
+		return HTTP_PREFIX + host + ":" + httpPort + "/" + app +  "/" + roomId + "/" + fileName;
 	}
 
 }
