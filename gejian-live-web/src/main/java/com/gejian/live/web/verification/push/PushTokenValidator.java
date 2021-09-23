@@ -1,5 +1,7 @@
 package com.gejian.live.web.verification.push;
 
+import com.gejian.common.core.exception.BusinessException;
+import com.gejian.live.common.enmus.error.LiveBroadcastErrorCode;
 import com.gejian.live.web.service.TokenService;
 import com.gejian.live.web.verification.AbstractValidator;
 import com.gejian.live.web.verification.Valid;
@@ -28,5 +30,8 @@ public class PushTokenValidator extends AbstractValidator {
 
 		Boolean aBoolean = tokenService.judgeToken(request, ValidType.PUSH);
 		log.info("PushTokenValidator valid result {}",aBoolean);
+		if(!aBoolean){
+			throw new BusinessException(LiveBroadcastErrorCode.TOKEN_FAIL);
+		}
 	}
 }

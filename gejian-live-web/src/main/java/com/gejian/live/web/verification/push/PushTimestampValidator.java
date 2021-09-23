@@ -1,5 +1,7 @@
 package com.gejian.live.web.verification.push;
 
+import com.gejian.common.core.exception.BusinessException;
+import com.gejian.live.common.enmus.error.LiveBroadcastErrorCode;
 import com.gejian.live.web.service.TokenService;
 import com.gejian.live.web.verification.AbstractValidator;
 import com.gejian.live.web.verification.Valid;
@@ -28,6 +30,8 @@ public class PushTimestampValidator extends AbstractValidator {
 	public void valid(VerifyRequest request) {
 		Boolean aBoolean=tokenService.judgeTimeStamp(request,ValidType.PUSH);
 		log.info("PushTimestampValidator valid resul {}",aBoolean);
-
+		if(!aBoolean){
+			throw new BusinessException(LiveBroadcastErrorCode.TIMESTAMP_FAIL);
+		}
 	}
 }

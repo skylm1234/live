@@ -1,5 +1,7 @@
 package com.gejian.live.web.verification.pull;
 
+import com.gejian.common.core.exception.BusinessException;
+import com.gejian.live.common.enmus.error.LiveBroadcastErrorCode;
 import com.gejian.live.web.service.TokenService;
 import com.gejian.live.web.verification.AbstractValidator;
 import com.gejian.live.web.verification.Valid;
@@ -27,5 +29,8 @@ public class PullTokenValidator extends AbstractValidator {
 
 		Boolean aBoolean=tokenService.judgeToken(request,ValidType.PULL);
 		log.info("PullTokenValidator valid result {}",aBoolean);
+		if(!aBoolean){
+			throw new BusinessException(LiveBroadcastErrorCode.TOKEN_FAIL);
+		}
 	}
 }
