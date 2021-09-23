@@ -1,6 +1,10 @@
 package com.gejian.live.web.verification.push;
 
-import com.gejian.live.web.service.TokenService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.gejian.common.core.exception.BusinessException;
+import com.gejian.live.common.enums.error.LiveBroadcastErrorCode;
+import com.gejian.live.dao.entity.AnchorRoom;
+import com.gejian.live.web.service.AnchorRoomService;
 import com.gejian.live.web.verification.AbstractValidator;
 import com.gejian.live.web.verification.Valid;
 import com.gejian.live.web.verification.ValidType;
@@ -22,9 +26,20 @@ public class PushStreamerValidator extends AbstractValidator {
 
 
 	@Autowired
-	private TokenService tokenService;
+	private AnchorRoomService anchorRoomService;
+
 	@Override
 	public void valid(VerifyRequest request) {
+
+		int count = anchorRoomService.count(Wrappers.lambdaQuery(AnchorRoom.class)
+				.eq(AnchorRoom::getDeleted, false)
+				.eq(AnchorRoom::getAnchorStatus, false)
+				.eq(AnchorRoom::getLiveStatus, false)
+				.eq(AnchorRoom::getRoomId, request.getRoomId())
+		);
+		if(count==0){
+			throw new BusinessException(LiveBroadcastErrorCode.BROADCAST_PERMISSION_FAIL);
+		}
 
 		log.info("PushStreamerValidator valid result {}");
 	}
