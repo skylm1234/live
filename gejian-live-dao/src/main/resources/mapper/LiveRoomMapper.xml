@@ -20,7 +20,7 @@
     </sql>
 
 	<update id="updateByVersionAndId">
-        UPDATE substance_room sr
+        UPDATE live_room sr
         SET sr.is_occupy = 1,
         sr.version = sr.version + 1
         WHERE
