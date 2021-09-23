@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /**
  * @author yuanxue
  * @Date 2021/9/22
- * @description: 直播申请直播Service实现类
+ * @description: 直播申请审核
  */
 @Service
 public class AnchorRoomServiceImpl extends ServiceImpl<AnchorRoomMapper, AnchorRoom> implements AnchorRoomService {

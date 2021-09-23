@@ -36,7 +36,7 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		String address = serverComponent.getRtmpUrl();
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(roomId.toString(), ValidType.PUSH);
 		StringBuilder streamingCode = new StringBuilder();
-		streamingCode.append(roomId).append("?").append("token=").append(tokenEntity.getToken()).append("&expire=").append(tokenEntity.getTimestamp());
+		streamingCode.append(roomId).append("?").append("token=").append(tokenEntity.getToken()).append("&expire=").append(tokenEntity.getExpireTimestamp());
 		PushFlowAddressResponseDTO addressDTO = new PushFlowAddressResponseDTO();
 		addressDTO.setAddress(address);
 		addressDTO.setStreamingCode(streamingCode.toString());
@@ -49,10 +49,10 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(pullFlowAddressDTO.getRoomId().toString(), ValidType.PULL);
 		String rtmpUrl = serverComponent.getRtmpUrl();
 		StringBuilder rtmpAddress = new StringBuilder();
-		rtmpAddress.append(rtmpUrl).append(pullFlowAddressDTO.getRoomId()).append("?").append("token=").append(tokenEntity.getToken()).append("?expire=").append(tokenEntity.getTimestamp());
+		rtmpAddress.append(rtmpUrl).append(pullFlowAddressDTO.getRoomId()).append("?").append("token=").append(tokenEntity.getToken()).append("?expire=").append(tokenEntity.getExpireTimestamp());
 		String hlsUrl = serverComponent.getm3u8Url(pullFlowAddressDTO.getRoomId().toString());
 		StringBuilder hlsAddress = new StringBuilder();
-		hlsAddress.append(hlsUrl).append("?").append("token=").append(tokenEntity.getToken()).append("?expire=").append(tokenEntity.getTimestamp());
+		hlsAddress.append(hlsUrl).append("?").append("token=").append(tokenEntity.getToken()).append("?expire=").append(tokenEntity.getExpireTimestamp());
 		addressDTO.setRtmpAddress(rtmpAddress.toString());
 		addressDTO.setHlsAddress(hlsAddress.toString());
 		return addressDTO;

@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 /**
  * @author yuanxue
  * @Date 2021/9/22
- * @description: 审核通过分配房间号
+ * @description: 直播申请
  */
 @Service
 public class AnchorServiceImpl extends ServiceImpl<AnchorMapper, Anchor> implements AnchorService {
 
 	@Override
-	public Boolean saveAnchorRoom(AnchorDTO anchorDTO) {
+	public Boolean saveAnchor(AnchorDTO anchorDTO) {
 		final GeJianUser user = SecurityUtils.getUser();
 		Anchor anchor = BeanUtil.copyProperties(anchorDTO, Anchor.class);
 		anchor.setUserId(user.getId());

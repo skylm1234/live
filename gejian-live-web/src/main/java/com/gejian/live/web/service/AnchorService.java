@@ -19,6 +19,6 @@ public interface AnchorService extends IService<Anchor> {
 	 * @param anchorDTO 申请信息
 	 * @return
 	 */
-	Boolean saveAnchorRoom(AnchorDTO anchorDTO);
+	Boolean saveAnchor(AnchorDTO anchorDTO);
 
 }
