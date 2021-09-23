@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gejian.common.core.constant.SecurityConstants;
 import com.gejian.common.core.exception.BusinessException;
 import com.gejian.leaf.client.feign.RemoteLeafService;
-import com.gejian.live.common.enmus.error.LiveRoomErrorCode;
+import com.gejian.live.common.enums.error.LiveRoomErrorCode;
 import com.gejian.live.dao.entity.LiveRoom;
 import com.gejian.live.web.event.LiveRoomEvent;
 import lombok.extern.slf4j.Slf4j;
