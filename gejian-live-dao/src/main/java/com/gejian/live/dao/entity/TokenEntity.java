@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenEntity {
 	private String token;
-	private Long timestamp;
+	private Long expireTimestamp;
 
 }

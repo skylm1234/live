@@ -17,7 +17,7 @@ public class VerifyRequest {
 
 	int userId;
 
-	int roomId;
+	String roomId;
 
 	String token;
 

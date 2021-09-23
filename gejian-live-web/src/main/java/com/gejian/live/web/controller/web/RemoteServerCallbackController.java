@@ -1,5 +1,8 @@
 package com.gejian.live.web.controller.web;
 
+import cn.hutool.json.JSONUtil;
+import com.gejian.live.common.constants.TokenConstants;
+import com.gejian.live.dao.entity.ext.PublishDo;
 import com.gejian.live.web.verification.PullValidChain;
 import com.gejian.live.web.verification.PushValidChain;
 import com.gejian.live.web.verification.VerifyRequest;
@@ -7,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -33,14 +37,28 @@ public class RemoteServerCallbackController {
 
 	@RequestMapping(value = "/streams", method = RequestMethod.POST)
 	public int streams(@RequestBody String bodyString) {
-		pushValidChain.process(new VerifyRequest());
-		log.info("# 触发事件 [ 客户端发布流 ], msg = {}", bodyString);
+		PublishDo publishDo = JSONUtil.toBean(bodyString, PublishDo.class);
+
+		VerifyRequest verifyRequest = new VerifyRequest();
+		Map<String, String> map = resolveParam(publishDo.getParam());
+//		verifyRequest.setUserId(0);
+		verifyRequest.setRoomId(publishDo.getStream());
+		verifyRequest.setToken(map.get(TokenConstants.TOKEN));
+		verifyRequest.setExpireTimestamp(Long.valueOf(map.get(TokenConstants.EXPIRETIMESTAMP)));
+		log.info("# 触发事件 [ 客户端发布流 ], msg = {} , push-publishDo={}", bodyString,publishDo);
+		try{
+			pushValidChain.process(verifyRequest);
+		}catch (Exception e){
+			log.error("客户端不合法",e);
+			return -1;
+		}
 		return 0;
 	}
 
 	@RequestMapping(value = "/sessions", method = RequestMethod.POST)
 	public int sessions(@RequestBody String bodyString) {
-		log.info("# 触发事件 [ 播放流 ], msg = {}", bodyString);
+		PublishDo publishDo = JSONUtil.toBean(bodyString, PublishDo.class);
+		log.info("# 触发事件 [ 播放流 ], msg = {} , play-publishDo={}", bodyString,publishDo);
 		pullValidChain.process(new VerifyRequest());
 		return 0;
 	}
@@ -72,5 +90,21 @@ public class RemoteServerCallbackController {
 							 @RequestParam Map<String, Object> param) {
 		log.info("# 触发事件 [ hls ], app= {}, stream = {}, ts_url = {}, param= {}", app, stream, ts_url, param);
 		return 0;
+	}
+
+	/**
+	 * 解析param  ?token=123&expire=132
+	 * @param param
+	 * @return
+	 */
+	public Map<String,String> resolveParam(String param){
+		Map<String, String> hashMap = new HashMap<>();
+		String substring = param.substring(1);
+		String[] split = substring.split("&");
+		for(String one: split){
+			String[] obj = one.split("=");
+			hashMap.put(obj[0],obj[1]);
+		}
+		return hashMap;
 	}
 }

@@ -78,7 +78,7 @@ public class TokenService {
 		digester.setSalt(String.valueOf(tomorrowTimeMillis).getBytes());
 		String token = digester.digestHex(originToken);
 		tokenEntity.setToken(token);
-		tokenEntity.setTimestamp(tomorrowTimeMillis);
+		tokenEntity.setExpireTimestamp(tomorrowTimeMillis);
 		log.info("接口自动生成的：源字符串["+originToken+"]=====时间戳["+tomorrowTimeMillis+"]===加密字符串["+token+"]");
 		if (validType == ValidType.PULL) {
 			//拉流
@@ -123,7 +123,7 @@ public class TokenService {
 	 * @return
 	 */
 	public Boolean judgeTokenAndTimeStamp(String roomId, ValidType validType, TokenEntity tokenEntity) {
-		if (StrUtil.isBlank(tokenEntity.getToken()) || null == tokenEntity.getTimestamp()) {
+		if (StrUtil.isBlank(tokenEntity.getToken()) || null == tokenEntity.getExpireTimestamp()) {
 			return Boolean.FALSE;
 		}
 		String redisToken = getRedisTokenKey(roomId, validType);
@@ -136,7 +136,7 @@ public class TokenService {
 			boolean lessOrEqual = false;
 			long current = DateUtil.current();
 			long timeLimit=current+expire*1000;
-			if(Math.abs(timeLimit-tokenEntity.getTimestamp())<=1000){
+			if(Math.abs(timeLimit-tokenEntity.getExpireTimestamp())<=1000){
 				lessOrEqual=true;
 			}
 //			if(timeLimit>=tokenEntity.getTimestamp()){
@@ -152,7 +152,7 @@ public class TokenService {
 				//token加密是否正常校验
 				String origin = stringRedisTemplate.opsForValue().get(redisToken);
 				if (!StrUtil.isBlank(origin)) {
-					TokenEntity redisTokenEntity = generateTokenByTimestampAndToken(roomId, tokenEntity.getTimestamp(), validType);
+					TokenEntity redisTokenEntity = generateTokenByTimestampAndToken(roomId, tokenEntity.getExpireTimestamp(), validType);
 					//token校验
 					if (Objects.equals(tokenEntity.getToken(),redisTokenEntity.getToken())) {
 						return Boolean.TRUE;
@@ -187,7 +187,7 @@ public class TokenService {
 	 */
 	public Boolean judgeTimeStamp(VerifyRequest request, ValidType validType) {
 
-		String redisToken = getRedisTokenKey(String.valueOf(request.getRoomId()), validType);
+		String redisToken = getRedisTokenKey(request.getRoomId(), validType);
 		if (!StrUtil.isBlank(redisToken)) {
 			Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(redisToken);
 
@@ -228,7 +228,7 @@ public class TokenService {
 	 */
 	public Boolean judgeToken(VerifyRequest request, ValidType validType) {
 
-		String redisToken = getRedisTokenKey(String.valueOf(request.getRoomId()), validType);
+		String redisToken = getRedisTokenKey(request.getRoomId(), validType);
 		if (!StrUtil.isBlank(redisToken)) {
 			//token加密是否正常校验
 			String origin = stringRedisTemplate.opsForValue().get(redisToken);
