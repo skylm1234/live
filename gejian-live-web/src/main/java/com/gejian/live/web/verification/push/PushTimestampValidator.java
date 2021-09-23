@@ -1,7 +1,7 @@
 package com.gejian.live.web.verification.push;
 
 import com.gejian.common.core.exception.BusinessException;
-import com.gejian.live.common.enmus.error.LiveBroadcastErrorCode;
+import com.gejian.live.common.enums.error.LiveBroadcastErrorCode;
 import com.gejian.live.web.service.TokenService;
 import com.gejian.live.web.verification.AbstractValidator;
 import com.gejian.live.web.verification.Valid;
