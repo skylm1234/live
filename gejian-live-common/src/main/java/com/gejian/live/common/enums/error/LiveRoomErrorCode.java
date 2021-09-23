@@ -1,4 +1,4 @@
-package com.gejian.live.common.enmus.error;
+package com.gejian.live.common.enums.error;
 
 import com.gejian.common.core.enums.ErrorCode;
 import lombok.AllArgsConstructor;
