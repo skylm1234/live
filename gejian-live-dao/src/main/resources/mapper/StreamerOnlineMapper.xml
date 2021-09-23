@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Auto created by codeAppend plugin -->
+<mapper namespace="com.gejian.live.dao.mapper.StreamerOnlineMapper">
+
+    <resultMap id="StreamerOnlineRM" type="com.gejian.live.dao.entity.StreamerOnline">
+		<result property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="roomCode" column="room_code"/>
+		<result property="roomCoverFileName" column="room_cover_file_name"/>
+		<result property="roomCoverFileBucketName" column="room_cover_file_bucket_name"/>
+		<result property="clientId" column="client_id"/>
+		<result property="ip" column="ip"/>
+		<result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <!-- all sql columns -->
+    <sql id="columns">
+         `id`,`user_id`,`room_code`,`room_cover_file_name`,`room_cover_file_bucket_name`,`client_id`,`ip`,`create_time`
+	</sql>
+
+</mapper>
