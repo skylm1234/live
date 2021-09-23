@@ -35,11 +35,9 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		Integer roomId = anchorRoomService.getByUserId(user.getId());
 		String address = serverComponent.getRtmpUrl();
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(roomId.toString(), ValidType.PUSH);
-		StringBuilder streamingCode = new StringBuilder();
-		streamingCode.append(roomId).append("?").append("token=").append(tokenEntity.getToken()).append("&expire=").append(tokenEntity.getExpireTimestamp());
 		PushFlowAddressResponseDTO addressDTO = new PushFlowAddressResponseDTO();
 		addressDTO.setAddress(address);
-		addressDTO.setStreamingCode(streamingCode.toString());
+		addressDTO.setStreamingCode(roomId + "?token=" + tokenEntity.getToken() + "&expire=" + tokenEntity.getExpireTimestamp());
 		return addressDTO;
 	}
 
@@ -48,13 +46,9 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		PullFlowAddressResponseDTO addressDTO = new PullFlowAddressResponseDTO();
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(pullFlowAddressDTO.getRoomId().toString(), ValidType.PULL);
 		String rtmpUrl = serverComponent.getRtmpUrl();
-		StringBuilder rtmpAddress = new StringBuilder();
-		rtmpAddress.append(rtmpUrl).append(pullFlowAddressDTO.getRoomId()).append("?").append("token=").append(tokenEntity.getToken()).append("?expire=").append(tokenEntity.getExpireTimestamp());
 		String hlsUrl = serverComponent.getm3u8Url(pullFlowAddressDTO.getRoomId().toString());
-		StringBuilder hlsAddress = new StringBuilder();
-		hlsAddress.append(hlsUrl).append("?").append("token=").append(tokenEntity.getToken()).append("?expire=").append(tokenEntity.getExpireTimestamp());
-		addressDTO.setRtmpAddress(rtmpAddress.toString());
-		addressDTO.setHlsAddress(hlsAddress.toString());
+		addressDTO.setRtmpAddress(rtmpUrl + "/" + pullFlowAddressDTO.getRoomId() + "?token=" + tokenEntity.getToken() + "?expire=" + tokenEntity.getExpireTimestamp());
+		addressDTO.setHlsAddress(hlsUrl + "?token=" + tokenEntity.getToken() + "?expire=" + tokenEntity.getExpireTimestamp());
 		return addressDTO;
 	}
 }
