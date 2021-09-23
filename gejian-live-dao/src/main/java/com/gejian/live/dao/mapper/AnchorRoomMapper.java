@@ -13,10 +13,4 @@ import com.gejian.live.dao.entity.AnchorRoom;
  */
 public interface AnchorRoomMapper extends BaseMapper<AnchorRoom> {
 
-	/**
-	 * 通过主播用户id获取房间号
-	 * @param userId
-	 * @return
-	 */
-	Integer getByUserId(Long userId);
 }

@@ -39,8 +39,4 @@ public class AnchorRoomServiceImpl extends ServiceImpl<AnchorRoomMapper, AnchorR
 		return this.save(anchorRoom);
 	}
 
-	@Override
-	public Integer getByUserId(Long userId) {
-		return baseMapper.getByUserId(userId);
-	}
 }

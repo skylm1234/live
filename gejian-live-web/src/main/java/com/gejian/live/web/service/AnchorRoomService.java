@@ -22,10 +22,4 @@ public interface AnchorRoomService extends IService<AnchorRoom> {
 	 */
 	Boolean saveAnchorRoom(AnchorRoomDTO anchorRoomDTO);
 
-	/**
-	 * 通过主播用户id获取房间号
-	 * @param id
-	 * @return
-	 */
-	Integer getByUserId(Long id);
 }

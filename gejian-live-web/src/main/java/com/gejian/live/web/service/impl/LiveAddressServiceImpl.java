@@ -1,10 +1,12 @@
 package com.gejian.live.web.service.impl;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gejian.common.security.service.GeJianUser;
 import com.gejian.common.security.util.SecurityUtils;
 import com.gejian.live.common.dto.PullFlowAddressDTO;
 import com.gejian.live.common.dto.PullFlowAddressResponseDTO;
 import com.gejian.live.common.dto.PushFlowAddressResponseDTO;
+import com.gejian.live.dao.entity.AnchorRoom;
 import com.gejian.live.dao.entity.TokenEntity;
 import com.gejian.live.web.config.ServerComponent;
 import com.gejian.live.web.service.AnchorRoomService;
@@ -32,12 +34,14 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 	@Override
 	public PushFlowAddressResponseDTO getPushFlowAddress() {
 		final GeJianUser user = SecurityUtils.getUser();
-		Integer roomId = anchorRoomService.getByUserId(user.getId());
+		AnchorRoom anchorRoom = anchorRoomService.getOne(Wrappers.lambdaQuery(AnchorRoom.class)
+				.eq(AnchorRoom::getDeleted, 0)
+				.eq(AnchorRoom::getUserId, user.getId()));
 		String address = serverComponent.getRtmpUrl();
-		TokenEntity tokenEntity = tokenService.generateTokenSalt(roomId.toString(), ValidType.PUSH);
+		TokenEntity tokenEntity = tokenService.generateTokenSalt(anchorRoom.getRoomId().toString(), ValidType.PUSH);
 		PushFlowAddressResponseDTO addressDTO = new PushFlowAddressResponseDTO();
 		addressDTO.setAddress(address);
-		addressDTO.setStreamingCode(roomId + "?token=" + tokenEntity.getToken() + "&expire=" + tokenEntity.getExpireTimestamp());
+		addressDTO.setStreamingCode(anchorRoom.getRoomId() + "?token=" + tokenEntity.getToken() + "&expire=" + tokenEntity.getExpireTimestamp());
 		return addressDTO;
 	}
 

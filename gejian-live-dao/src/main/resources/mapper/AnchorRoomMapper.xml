@@ -21,8 +21,5 @@
     <sql id="columns">
          `id`,`user_id`,`room_id`,`live_status`,`anchor_status`,`room_description`,`room_title`,`create_time`,`update_time`,`deleted`
 	</sql>
-	<select id="getByUserId" resultType="java.lang.Integer">
-		SELECT room_id FROM anchor_room WHERE user_id = #{ userId} and deleted = 0
-	</select>
 
 </mapper>
