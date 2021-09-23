@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- Auto created by codeAppend plugin -->
+<mapper namespace="com.gejian.live.dao.mapper.AnchorRoomMapper">
+
+    <resultMap id="BaseResultMap" type="com.gejian.live.dao.entity.AnchorRoom">
+		<result property="id" column="id"/>
+		<result property="userId" column="user_id"/>
+		<result property="roomId" column="room_id"/>
+		<result property="liveStatus" column="live_status"/>
+		<result property="anchorStatus" column="anchor_status"/>
+		<result property="roomDescription" column="room_description"/>
+		<result property="roomTitle" column="room_title"/>
+		<result property="createTime" column="create_time"/>
+		<result property="updateTime" column="update_time"/>
+		<result property="deleted" column="deleted"/>
+    </resultMap>
+
+    <!-- all sql columns -->
+    <sql id="columns">
+         `id`,`user_id`,`room_id`,`live_status`,`anchor_status`,`room_description`,`room_title`,`create_time`,`update_time`,`deleted`
+	</sql>
+	<select id="getByUserId" resultType="java.lang.Integer">
+		SELECT room_id FROM anchor_room WHERE user_id = #{ userId} and deleted = 0
+	</select>
+
+</mapper>
