@@ -16,6 +16,10 @@
 		<maven.compiler.target>8</maven.compiler.target>
 		<spring-boot-admin.version>2.4.3</spring-boot-admin.version>
 		<jasypt.version>2.1.0</jasypt.version>
+		<javacpp.version>1.5.6</javacpp.version>
+		<javacpp-presets.version>4.1-1.4.4</javacpp-presets.version>
+		<!-- ffmpeg版本 -->
+		<ffmpeg.version>4.4</ffmpeg.version>
 	</properties>
 
 
@@ -130,7 +134,44 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<!--javacv -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv-platform</artifactId>
+			<version>${javacpp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacv</artifactId>
+			<version>${javacpp.version}</version>
+		</dependency>
+		<!-- javacpp -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>javacpp</artifactId>
+			<version>${javacpp.version}</version>
+		</dependency>
+		<!-- ffmpeg -->
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>ffmpeg-platform</artifactId>
+			<version>${ffmpeg.version}-${javacpp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>${ffmpeg.version}-${javacpp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>ffmpeg-platform</artifactId>
+			<version>${javacpp-presets.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.bytedeco.javacpp-presets</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>${javacpp-presets.version}</version>
+		</dependency>
 
 	</dependencies>
 
