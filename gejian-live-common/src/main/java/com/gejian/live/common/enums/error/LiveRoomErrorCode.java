@@ -15,7 +15,7 @@ public enum LiveRoomErrorCode implements ErrorCode {
 
 	ROOM_REPEAT_FAIL(110001, "房间号重复！"),
 	ROOM_FULL_FAIL(110002, "没有多余的房间号了！"),
-
+	ROOM_GET_FAIL(110003,"没有申请到直播房间，推流端地址获取失败！")
 	;
 
 

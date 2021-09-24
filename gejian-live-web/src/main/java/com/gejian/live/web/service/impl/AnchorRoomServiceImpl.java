@@ -12,6 +12,8 @@ import com.gejian.live.web.service.LiveRoomHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /**
  * @author yuanxue
  * @Date 2021/9/22
@@ -28,6 +30,9 @@ public class AnchorRoomServiceImpl extends ServiceImpl<AnchorRoomMapper, AnchorR
 	@Override
 	public Boolean saveAnchorRoom(AnchorRoomDTO anchorRoomDTO) {
 		Anchor anchor = anchorService.getById(anchorRoomDTO.getAnchorId());
+		if (Objects.isNull(anchor)){
+			return Boolean.FALSE;
+		}
 		anchor.setStatus(1);
 		anchorService.updateById(anchor);
 		AnchorRoom anchorRoom = BeanUtil.copyProperties(anchorRoomDTO, AnchorRoom.class);
