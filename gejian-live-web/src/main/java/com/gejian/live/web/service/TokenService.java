@@ -46,7 +46,7 @@ public class TokenService {
 	 */
 	private static final int TOKEN_PULL_TIME = 10;
 	/**
-	 * md5加密对象
+     * md5加密对象
 	 */
 	private Digester digester=new Digester(DigestAlgorithm.MD5);
 
@@ -65,6 +65,32 @@ public class TokenService {
 	}
 
 	/**
+	 * 获取10分钟后的时间戳
+	 * @return
+	 */
+	public Long getTenMillis(){
+
+		return System.currentTimeMillis()+TOKEN_PULL_TIME*60*1000;
+	}
+
+	/**
+	 * 构建token
+	 * @param originToken
+	 * @param expireTimestamp
+	 * @return
+	 */
+	private TokenEntity buildToken(String originToken, Long expireTimestamp){
+		TokenEntity tokenEntity = new TokenEntity();
+		String salt = String.valueOf(expireTimestamp).substring(0, String.valueOf(expireTimestamp).length() - 4);
+		digester.setSalt(salt.getBytes());
+		String token = digester.digestHex(originToken);
+		tokenEntity.setToken(token);
+		tokenEntity.setExpireTimestamp(expireTimestamp);
+		log.info("源字符串[{}]=====时间戳[{}]===加密字符串[{}]====盐值[{}]",originToken,expireTimestamp,tokenEntity.getToken(),salt);
+		return tokenEntity;
+	}
+
+	/**
 	 * 生成随机token
 	 *
 	 * @param roomId
@@ -72,48 +98,60 @@ public class TokenService {
 	 * @return
 	 */
 	public TokenEntity generateTokenSalt(String roomId, ValidType validType) {
-		TokenEntity tokenEntity = new TokenEntity();
-		String originToken = RandomUtil.randomString(TOKEN_LENGTH);
-		Long tomorrowTimeMillis = getTomorrowTimeMillis();
-		digester.setSalt(String.valueOf(tomorrowTimeMillis).getBytes());
-		String token = digester.digestHex(originToken);
-		tokenEntity.setToken(token);
-		tokenEntity.setExpireTimestamp(tomorrowTimeMillis);
-		log.info("接口自动生成的：源字符串["+originToken+"]=====时间戳["+tomorrowTimeMillis+"]===加密字符串["+token+"]");
-		if (validType == ValidType.PULL) {
-			//拉流
-			String pullKey = StrUtil.format(TOKEN_PULL, roomId);
-			stringRedisTemplate.opsForValue().set(pullKey, originToken, TOKEN_PULL_TIME, TimeUnit.MINUTES);
-			return tokenEntity;
-		} else if (validType == ValidType.PUSH) {
-			//推流
-			String pushKey = StrUtil.format(TOKEN_PUSH, roomId);
-			stringRedisTemplate.opsForValue().set(pushKey, originToken, TOKEN_PUSH_TIME, TimeUnit.MINUTES);
+		String redisTokenKey = getRedisTokenKey(roomId, validType);
+		String originToken = stringRedisTemplate.opsForValue().get(redisTokenKey);
+		if(StrUtil.isBlank(originToken)){
+			//重新生成
+			originToken= RandomUtil.randomString(TOKEN_LENGTH);
+			if (validType == ValidType.PULL) {
+				//PULL 拉流时间戳
+				Long pullTimeMillis = getTenMillis();
+				TokenEntity tokenEntity = buildToken(originToken, pullTimeMillis);
+				stringRedisTemplate.opsForValue().set(redisTokenKey, originToken, TOKEN_PULL_TIME, TimeUnit.MINUTES);
+				return tokenEntity;
+			} else if (validType == ValidType.PUSH) {
+				//PUSH 推流时间戳
+				Long pushTimeMillis = getTomorrowTimeMillis();
+				TokenEntity tokenEntity = buildToken(originToken, pushTimeMillis);
+				stringRedisTemplate.opsForValue().set(redisTokenKey, originToken, TOKEN_PUSH_TIME, TimeUnit.MINUTES);
+				return tokenEntity;
+			}
+		}else {
+			//获取redis的Token原字符串 重新加密字符串
+			Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(redisTokenKey);
+			Long limit=System.currentTimeMillis()+expire*1000;
+			TokenEntity tokenEntity = buildToken(originToken, limit);
 			return tokenEntity;
 		}
 		return null;
-
 	}
 
 	/**
-	 * 根据 原token和时间戳生成md5 Token
+	 * 刷新Token
 	 * @param roomId
-	 * @param timestamp
 	 * @param validType
 	 * @return
 	 */
-	public TokenEntity generateTokenByTimestampAndToken(String roomId,Long timestamp ,ValidType validType) {
-
+	public TokenEntity refresTokenSalt(String roomId, ValidType validType){
 		String redisTokenKey = getRedisTokenKey(roomId, validType);
-		String originToken = stringRedisTemplate.opsForValue().get(redisTokenKey);
-		digester.setSalt(String.valueOf(timestamp).getBytes());
-		String token = digester.digestHex(originToken);
-		TokenEntity tokenEntity = new TokenEntity(token, timestamp);
-		log.info("前端入参生成的：源字符串["+originToken+"]=====时间戳["+timestamp+"]===加密字符串["+token+"]");
-
-		return tokenEntity;
-
+		String originToken= RandomUtil.randomString(TOKEN_LENGTH);
+		if (validType == ValidType.PULL) {
+			//PULL 拉流时间戳
+			Long pullTimeMillis = getTenMillis();
+			TokenEntity tokenEntity = buildToken(originToken, pullTimeMillis);
+			stringRedisTemplate.opsForValue().set(redisTokenKey, originToken, TOKEN_PULL_TIME, TimeUnit.MINUTES);
+			return tokenEntity;
+		} else if (validType == ValidType.PUSH) {
+			//PUSH 推流时间戳
+			Long pushTimeMillis = getTomorrowTimeMillis();
+			TokenEntity tokenEntity = buildToken(originToken, pushTimeMillis);
+			stringRedisTemplate.opsForValue().set(redisTokenKey, originToken, TOKEN_PUSH_TIME, TimeUnit.MINUTES);
+			return tokenEntity;
+		}
+		return null;
 	}
+
+
 
 	/**
 	 * token 校验时间戳和token
@@ -126,9 +164,9 @@ public class TokenService {
 		if (StrUtil.isBlank(tokenEntity.getToken()) || null == tokenEntity.getExpireTimestamp()) {
 			return Boolean.FALSE;
 		}
-		String redisToken = getRedisTokenKey(roomId, validType);
-		if (!StrUtil.isBlank(redisToken)) {
-			Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(redisToken);
+		String redisTokenKey = getRedisTokenKey(roomId, validType);
+		if (!StrUtil.isBlank(redisTokenKey)) {
+			Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(redisTokenKey);
 			if (expire == -2) {
 				return Boolean.FALSE;
 			}
@@ -136,23 +174,15 @@ public class TokenService {
 			boolean lessOrEqual = false;
 			long current = DateUtil.current();
 			long timeLimit=current+expire*1000;
-			if(Math.abs(timeLimit-tokenEntity.getExpireTimestamp())<=1000){
+			if(Math.abs(timeLimit-tokenEntity.getExpireTimestamp())<=10000){
 				lessOrEqual=true;
 			}
-//			if(timeLimit>=tokenEntity.getTimestamp()){
-//				lessOrEqual=true;
-//			}else {
-//				//判断是不是在1秒类
-//				long cha=tokenEntity.getTimestamp()-timeLimit;
-//				if(cha<1000){
-//					lessOrEqual=true;
-//				}
-//			}
+
 			if (lessOrEqual) {
 				//token加密是否正常校验
-				String origin = stringRedisTemplate.opsForValue().get(redisToken);
+				String origin = stringRedisTemplate.opsForValue().get(redisTokenKey);
 				if (!StrUtil.isBlank(origin)) {
-					TokenEntity redisTokenEntity = generateTokenByTimestampAndToken(roomId, tokenEntity.getExpireTimestamp(), validType);
+					TokenEntity redisTokenEntity = buildToken(origin, tokenEntity.getExpireTimestamp());
 					//token校验
 					if (Objects.equals(tokenEntity.getToken(),redisTokenEntity.getToken())) {
 						return Boolean.TRUE;
@@ -165,6 +195,7 @@ public class TokenService {
 
 
 	/**
+	 * 获取redis存储的key
 	 * @param roomId
 	 * @param validType
 	 * @return
@@ -190,32 +221,15 @@ public class TokenService {
 		String redisToken = getRedisTokenKey(request.getRoomId(), validType);
 		if (!StrUtil.isBlank(redisToken)) {
 			Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(redisToken);
-
 			if (expire == -2) {
 				return Boolean.FALSE;
 			}
 			long current = DateUtil.current();
 			long timeLimit=current+expire*1000;
-			log.info("参数时间["+request.getExpireTimestamp()+"]==============最大时间["+timeLimit+"]");
-			if(Math.abs(timeLimit-request.getExpireTimestamp())<=1000){
+			//改为10秒钟
+			if(Math.abs(timeLimit-request.getExpireTimestamp())<=10000){
 				return Boolean.TRUE;
 			}
-//			if(timeLimit>=request.getExpireTimestamp()){
-//				log.info("参数时间["+request.getExpireTimestamp()+"]==============最大时间["+timeLimit+"]");
-//				return Boolean.TRUE;
-//			}else {
-//				//判断是不是在1秒类
-//				long cha=request.getExpireTimestamp()-timeLimit;
-//				log.info("参数时间["+request.getExpireTimestamp()+"]==============最大时间["+timeLimit+"]");
-//				log.info("相差时间=="+cha);
-//				if(cha<1000){
-//					return Boolean.TRUE;
-//				}
-//
-//			}
-
-			//token过期时间校验
-
 		}
 		return Boolean.FALSE;
 	}
@@ -233,7 +247,7 @@ public class TokenService {
 			//token加密是否正常校验
 			String origin = stringRedisTemplate.opsForValue().get(redisToken);
 			if (!StrUtil.isBlank(origin)) {
-				TokenEntity redisTokenEntity = generateTokenByTimestampAndToken(String.valueOf(request.getRoomId()), request.getExpireTimestamp(), validType);
+				TokenEntity redisTokenEntity = buildToken(origin, request.getExpireTimestamp());
 				//token校验
 				if (Objects.equals(request.getToken(),redisTokenEntity.getToken())) {
 					return Boolean.TRUE;
