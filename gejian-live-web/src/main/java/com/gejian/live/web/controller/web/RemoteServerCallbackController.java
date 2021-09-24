@@ -1,10 +1,16 @@
 package com.gejian.live.web.controller.web;
 
+import com.gejian.live.common.dto.watch.UserWatchOnlineSaveDTO;
+import com.gejian.live.dao.entity.UserWatchOnline;
+import com.gejian.live.web.service.StreamerOfflineService;
+import com.gejian.live.web.service.StreamerOnlineService;
 import cn.hutool.json.JSONUtil;
 import com.gejian.common.core.exception.BusinessException;
 import com.gejian.live.common.constants.TokenConstants;
 import com.gejian.live.common.enums.error.LiveBroadcastErrorCode;
 import com.gejian.live.dao.entity.ext.PublishDo;
+import com.gejian.live.web.service.UserWatchOfflineService;
+import com.gejian.live.web.service.UserWatchOnlineService;
 import com.gejian.live.web.verification.PullValidChain;
 import com.gejian.live.web.verification.PushValidChain;
 import com.gejian.live.web.verification.VerifyRequest;
@@ -33,12 +39,27 @@ public class RemoteServerCallbackController {
 	@Autowired
 	private PullValidChain pullValidChain;
 
+	@Autowired
+	private StreamerOnlineService streamerOnlineService;
+	@Autowired
+	private StreamerOfflineService streamerOfflineService;
+	@Autowired
+	private UserWatchOnlineService userWatchOnlineService;
+	@Autowired
+	private UserWatchOfflineService userWatchOfflineService;
+
 
 	private List<String> ipIgnoreList = Arrays.asList("127.0.0.1");
 
 	@RequestMapping(value = "/clients", method = RequestMethod.POST)
 	public int clients(@RequestBody String bodyString) {
 		log.info("# 触发事件 [ 客户端连接 ], msg = {}", bodyString);
+		return 0;
+	}
+
+	@RequestMapping(value = "/closeClients", method = RequestMethod.POST)
+	public int closeClients(@RequestBody String bodyString) {
+		log.info("# 触发事件 [ 客户端连接关闭 ], msg = {}", bodyString);
 		return 0;
 	}
 
@@ -55,6 +76,21 @@ public class RemoteServerCallbackController {
 				return -1;
 			}
 		}
+		//TODO 主播开播
+		streamerOnlineService.StreamerStart(null, null, null, null);
+
+		log.info("# 触发事件 [ 客户端发布流 ], msg = {}", bodyString);
+		return 0;
+	}
+
+	@RequestMapping(value = "/closeStreams", method = RequestMethod.POST)
+	public int closeStreams(@RequestBody String bodyString) {
+		pushValidChain.process(new VerifyRequest());
+		log.info("# 触发事件 [ 客户端停止发布流 ], msg = {}", bodyString);
+
+		//TODO 主播结束直播
+		streamerOfflineService.StreamerEnd(null);
+
 		return 0;
 	}
 
@@ -73,7 +109,20 @@ public class RemoteServerCallbackController {
 			}
 
 		}
+		//TODO 用户播放流的时候记录用户基本信息
+		userWatchOnlineService.saveUserWatchOnline(new UserWatchOnlineSaveDTO());
 
+		return 0;
+	}
+
+
+	@RequestMapping(value = "/onStop", method = RequestMethod.POST)
+	public int onStop(@RequestBody String bodyString) {
+		//当客户端停止播放时。备注：停止播放可能不会关闭连接，还能再继续播放
+		log.info("# 触发事件 [ 客户端停止播放 ], msg = {}", bodyString);
+
+		//TODO 用户停止播放流的时候记录用户基本信息
+		userWatchOfflineService.saveUserWatchOffline(null, null);
 		return 0;
 	}
 
@@ -133,14 +182,14 @@ public class RemoteServerCallbackController {
 	 */
 	private VerifyRequest buildVerifyRequest(PublishDo publishDo) {
 		VerifyRequest verifyRequest = new VerifyRequest();
-		try{
+		try {
 			Map<String, String> map = resolveParam(publishDo.getParam());
 //			verifyRequest.setUserId(0);
 			verifyRequest.setRoomId(publishDo.getStream());
 			verifyRequest.setToken(map.get(TokenConstants.TOKEN));
 			verifyRequest.setExpireTimestamp(Long.valueOf(map.get(TokenConstants.EXPIRETIMESTAMP)));
-		}catch (Exception e){
-			log.error("客户端参数不合法",e);
+		} catch (Exception e) {
+			log.error("客户端参数不合法", e);
 			throw new BusinessException(LiveBroadcastErrorCode.ILLEGAL_PARAMETER);
 		}
 

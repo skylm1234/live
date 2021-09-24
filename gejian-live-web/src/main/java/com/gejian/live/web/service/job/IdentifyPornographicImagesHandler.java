@@ -1,6 +1,7 @@
 package com.gejian.live.web.service.job;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.gejian.common.core.util.UCloudPictureCensorUtils;
 import com.gejian.live.dao.entity.StreamerOnline;
 import com.gejian.live.web.service.StreamerOnlineService;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -68,7 +69,9 @@ public class IdentifyPornographicImagesHandler {
 
 		list.forEach(item->{
 			convertExecutor.execute(()->{
-
+				// TODO 获取截图
+				// TODO 进行鉴定
+				UCloudPictureCensorUtils.censor("");
 			});
 		});
 

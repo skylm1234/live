@@ -1,7 +1,8 @@
 package com.gejian.live.web.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gejian.live.common.dto.streamer_online.StreamerOnlineAdd;
+import com.gejian.live.common.dto.streamer.StreamerOnlineAdd;
 import com.gejian.live.dao.entity.StreamerOnline;
 import com.gejian.live.dao.mapper.StreamerOnlineMapper;
 import com.gejian.live.web.service.StreamerOnlineService;
@@ -19,11 +20,16 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 
 
 	@Override
-	public void StreamerStart() {
+	public void StreamerStart(Long userId, String clientId, String ip, Integer roomCode) {
 		//TODO 主播开始直播 修改直播房间直播状态
 
 		//TODO 添加主播直播线上记录
-		saveStreamerOnline(null);
+		StreamerOnlineAdd streamerOnlineAdd = new StreamerOnlineAdd();
+		streamerOnlineAdd.setUserId(userId);
+		streamerOnlineAdd.setIp(ip);
+		streamerOnlineAdd.setClientId(clientId);
+		streamerOnlineAdd.setRoomCode(roomCode);
+		saveStreamerOnline(streamerOnlineAdd);
 	}
 
 	@Override
@@ -34,5 +40,14 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 		streamerOnline.setRoomCode(streamerOnlineAdd.getRoomCode());
 		streamerOnline.setUserId(streamerOnlineAdd.getUserId());
 		return this.save(streamerOnline);
+	}
+
+	@Override
+	public StreamerOnline getByUserId(Long userId) {
+
+		LambdaQueryWrapper<StreamerOnline> wrapper = new LambdaQueryWrapper<>();
+		wrapper.eq(StreamerOnline::getUserId, userId);
+
+		return this.getOne(wrapper);
 	}
 }

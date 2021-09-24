@@ -1,4 +1,4 @@
-package com.gejian.live.common.dto.streamer_online;
+package com.gejian.live.common.dto.streamer;
 
 import lombok.Data;
 
