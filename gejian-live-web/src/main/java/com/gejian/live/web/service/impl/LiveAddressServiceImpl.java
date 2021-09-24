@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gejian.common.core.exception.BusinessException;
 import com.gejian.common.security.service.GeJianUser;
 import com.gejian.common.security.util.SecurityUtils;
+import com.gejian.live.common.constants.TokenConstants;
 import com.gejian.live.common.dto.PullFlowAddressDTO;
 import com.gejian.live.common.dto.PullFlowAddressResponseDTO;
 import com.gejian.live.common.dto.PushFlowAddressResponseDTO;
@@ -49,7 +50,7 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(anchorRoom.getRoomId().toString(), ValidType.PUSH);
 		PushFlowAddressResponseDTO addressDTO = new PushFlowAddressResponseDTO();
 		addressDTO.setAddress(address);
-		addressDTO.setStreamingCode(anchorRoom.getRoomId() + "?token=" + tokenEntity.getToken() + "&expire=" + tokenEntity.getExpireTimestamp());
+		addressDTO.setStreamingCode(anchorRoom.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&" + TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
 		return addressDTO;
 	}
 
@@ -59,8 +60,8 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(pullFlowAddressDTO.getRoomId().toString(), ValidType.PULL);
 		String rtmpUrl = serverComponent.getRtmpUrl();
 		String hlsUrl = serverComponent.getm3u8Url(pullFlowAddressDTO.getRoomId().toString());
-		addressDTO.setRtmpAddress(rtmpUrl + "/" + pullFlowAddressDTO.getRoomId() + "?token=" + tokenEntity.getToken() + "?expire=" + tokenEntity.getExpireTimestamp());
-		addressDTO.setHlsAddress(hlsUrl + "?token=" + tokenEntity.getToken() + "?expire=" + tokenEntity.getExpireTimestamp());
+		addressDTO.setRtmpAddress(rtmpUrl + "/" + pullFlowAddressDTO.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "?" + TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
+		addressDTO.setHlsAddress(hlsUrl + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "?" + TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
 		return addressDTO;
 	}
 }
