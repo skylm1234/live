@@ -1,7 +1,9 @@
 package com.gejian.live.web.controller.web;
 
 import cn.hutool.json.JSONUtil;
+import com.gejian.common.core.exception.BusinessException;
 import com.gejian.live.common.constants.TokenConstants;
+import com.gejian.live.common.enums.error.LiveBroadcastErrorCode;
 import com.gejian.live.dao.entity.ext.PublishDo;
 import com.gejian.live.web.verification.PullValidChain;
 import com.gejian.live.web.verification.PushValidChain;
@@ -44,9 +46,9 @@ public class RemoteServerCallbackController {
 	public int streams(@RequestBody String bodyString) {
 		PublishDo publishDo = JSONUtil.toBean(bodyString, PublishDo.class);
 		if (!ipIgnoreList.contains(publishDo.getIp())) {
-			VerifyRequest verifyRequest = buildVerifyRequest(publishDo);
-			log.info("# 触发事件 [ 客户端发布流 ], msg = {} , push-publishDo={}", bodyString, publishDo);
 			try {
+				VerifyRequest verifyRequest = buildVerifyRequest(publishDo);
+				log.info("# 触发事件 [ 客户端发布流 ], msg = {} , push-publishDo={}", bodyString, publishDo);
 				pushValidChain.process(verifyRequest);
 			} catch (Exception e) {
 				log.error("push-客户端不合法", e);
@@ -61,9 +63,9 @@ public class RemoteServerCallbackController {
 	public int sessions(@RequestBody String bodyString) {
 		PublishDo publishDo = JSONUtil.toBean(bodyString, PublishDo.class);
 		if (!ipIgnoreList.contains(publishDo.getIp())) {
-			VerifyRequest verifyRequest = buildVerifyRequest(publishDo);
-			log.info("# 触发事件 [ 播放流 ], msg = {} , play-publishDo={}", bodyString, publishDo);
 			try {
+				VerifyRequest verifyRequest = buildVerifyRequest(publishDo);
+				log.info("# 触发事件 [ 播放流 ], msg = {} , play-publishDo={}", bodyString, publishDo);
 				pullValidChain.process(verifyRequest);
 			} catch (Exception e) {
 				log.error("play-客户端不合法", e);
@@ -131,11 +133,17 @@ public class RemoteServerCallbackController {
 	 */
 	private VerifyRequest buildVerifyRequest(PublishDo publishDo) {
 		VerifyRequest verifyRequest = new VerifyRequest();
-		Map<String, String> map = resolveParam(publishDo.getParam());
+		try{
+			Map<String, String> map = resolveParam(publishDo.getParam());
 //			verifyRequest.setUserId(0);
-		verifyRequest.setRoomId(publishDo.getStream());
-		verifyRequest.setToken(map.get(TokenConstants.TOKEN));
-		verifyRequest.setExpireTimestamp(Long.valueOf(map.get(TokenConstants.EXPIRETIMESTAMP)));
+			verifyRequest.setRoomId(publishDo.getStream());
+			verifyRequest.setToken(map.get(TokenConstants.TOKEN));
+			verifyRequest.setExpireTimestamp(Long.valueOf(map.get(TokenConstants.EXPIRETIMESTAMP)));
+		}catch (Exception e){
+			log.error("客户端参数不合法",e);
+			throw new BusinessException(LiveBroadcastErrorCode.ILLEGAL_PARAMETER);
+		}
+
 		return verifyRequest;
 	}
 }
