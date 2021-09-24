@@ -137,18 +137,13 @@
 		<!--javacv -->
 		<dependency>
 			<groupId>org.bytedeco</groupId>
-			<artifactId>javacv-platform</artifactId>
-			<version>${javacpp.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco</groupId>
 			<artifactId>javacv</artifactId>
 			<version>${javacpp.version}</version>
 		</dependency>
 		<!-- javacpp -->
 		<dependency>
 			<groupId>org.bytedeco</groupId>
-			<artifactId>javacpp</artifactId>
+			<artifactId>javacpp-platform</artifactId>
 			<version>${javacpp.version}</version>
 		</dependency>
 		<!-- ffmpeg -->
@@ -156,21 +151,6 @@
 			<groupId>org.bytedeco</groupId>
 			<artifactId>ffmpeg-platform</artifactId>
 			<version>${ffmpeg.version}-${javacpp.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco</groupId>
-			<artifactId>ffmpeg</artifactId>
-			<version>${ffmpeg.version}-${javacpp.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>ffmpeg-platform</artifactId>
-			<version>${javacpp-presets.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.bytedeco.javacpp-presets</groupId>
-			<artifactId>ffmpeg</artifactId>
-			<version>${javacpp-presets.version}</version>
 		</dependency>
 
 	</dependencies>
