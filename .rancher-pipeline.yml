@@ -10,7 +10,7 @@ stages:
         mvn deploy
         cd ./gejian-live-web
         mvn compile
-        mvn package spring-boot:repackage
+        mvn package spring-boot:repackage -DskipTests=true
         ls -la ./target/
 - name: 构建镜像
   steps:
