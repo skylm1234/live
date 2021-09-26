@@ -1,4 +1,4 @@
-package com.gejian.live.web.ffmpeg;
+package com.gejian.live.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
