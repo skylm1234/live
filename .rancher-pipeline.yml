@@ -7,9 +7,9 @@ stages:
         # 编译
         mvn clean package -DskipTests=true
         # 上传到私服
-        mvn deploy
+        mvn deploy -DskipTests=true
         cd ./gejian-live-web
-        mvn compile
+        mvn compile -DskipTests=true
         mvn package spring-boot:repackage -DskipTests=true
         ls -la ./target/
 - name: 构建镜像
