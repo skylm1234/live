@@ -6,6 +6,8 @@ import com.gejian.live.common.dto.streamer.StreamerOnlineAdd;
 import com.gejian.live.dao.entity.StreamerOnline;
 import com.gejian.live.dao.mapper.StreamerOnlineMapper;
 import com.gejian.live.web.service.StreamerOnlineService;
+import com.gejian.live.web.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +20,8 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 	// example: baseMapper.insert(entity);
 	// example: baseMapper.selectByPage(params);
 
+	@Autowired
+	private TaskService taskService;
 
 	@Override
 	public void StreamerStart(Long userId, String clientId, String ip, Integer roomCode) {
@@ -39,6 +43,11 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 		streamerOnline.setIp(streamerOnlineAdd.getIp());
 		streamerOnline.setRoomCode(streamerOnlineAdd.getRoomCode());
 		streamerOnline.setUserId(streamerOnlineAdd.getUserId());
+
+		//创建定时任务并启动
+		Integer jobId = taskService.addAndStart(streamerOnline.getRoomCode());
+		streamerOnline.setJobId(jobId);
+
 		return this.save(streamerOnline);
 	}
 

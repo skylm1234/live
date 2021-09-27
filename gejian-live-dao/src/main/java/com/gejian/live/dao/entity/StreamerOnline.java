@@ -53,6 +53,12 @@ public class StreamerOnline {
 	private String ip;
 
 	/**
+	 * 定时任务ID
+	 */
+	@TableField("job_id")
+	private Integer jobId;
+
+	/**
 	 * 创建时间
 	 */
 	@TableField("create_time")

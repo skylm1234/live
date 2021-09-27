@@ -5,8 +5,10 @@ import com.gejian.common.minio.service.GeJianMinio;
 import com.gejian.live.dao.entity.StreamerOffline;
 import com.gejian.live.dao.entity.StreamerOnline;
 import com.gejian.live.dao.mapper.StreamerOfflineMapper;
+import com.gejian.live.web.service.ImageService;
 import com.gejian.live.web.service.StreamerOfflineService;
 import com.gejian.live.web.service.StreamerOnlineService;
+import com.gejian.live.web.service.TaskService;
 import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class StreamerOfflineServiceImpl extends ServiceImpl<StreamerOfflineMappe
 	private StreamerOnlineService streamerOnlineService;
 	@Autowired
 	private GeJianMinio geJianMinio;
+	@Autowired
+	private TaskService taskService;
+	@Autowired
+	private ImageService imageService;
 
 	@Override
 	public void StreamerEnd(Long userId) {
@@ -47,11 +53,14 @@ public class StreamerOfflineServiceImpl extends ServiceImpl<StreamerOfflineMappe
 		offline.setCreateTime(streamerOnline.getCreateTime());
 
 		//TODO 获取截图并更新在历史表
+		imageService.snapShot(streamerOnline.getRoomCode());
 
 		//保存历史记录
 		this.save(offline);
 		//删除线上记录
 		boolean result = streamerOnlineService.removeById(streamerOnline.getId());
+		//删除定时任务
+		taskService.remove(streamerOnline.getJobId());
 
 		return result;
 	}
