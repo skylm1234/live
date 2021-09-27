@@ -16,7 +16,6 @@ public class LiveRoomServiceImpl extends ServiceImpl<LiveRoomMapper, LiveRoom> i
 
 	@Override
 	public boolean updateByVersionAndId(LiveRoom one) {
-		int result= this.baseMapper.updateByVersionAndId(one);
-		return result==0?false:true;
+		return this.baseMapper.updateByVersionAndId(one) > 0;
 	}
 }

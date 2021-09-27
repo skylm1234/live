@@ -1,6 +1,7 @@
 package com.gejian.live.web.service;
 
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.gejian.common.core.constant.SecurityConstants;
 import com.gejian.common.core.exception.BusinessException;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * @author fengliang
@@ -139,13 +141,16 @@ public class LiveRoomHelper implements InitializingBean {
 	 */
     private void recursionRegisterRoom(Map<String, LiveRoom> map) {
         //拿到数据库第一条数据
-        LiveRoom one = liveRoomService.getOne(Wrappers.lambdaQuery(LiveRoom.class)
-                .eq(LiveRoom::getDeleted, false)
-                .eq(LiveRoom::getIsBeautifulNumber, false)
-                .eq(LiveRoom::getIsOccupy, false)
-                .last("limit 1")
-        );
-        if(Objects.isNull(one)){
+		LambdaQueryWrapper<LiveRoom> queryWrapper = Wrappers.lambdaQuery(LiveRoom.class)
+				.eq(LiveRoom::getDeleted, false)
+				.eq(LiveRoom::getIsBeautifulNumber, false)
+				.eq(LiveRoom::getIsOccupy, false)
+				.last("limit 1");
+		LiveRoom one = Optional.ofNullable(liveRoomService.getOne(queryWrapper)).orElseGet(() -> {
+			resize();
+			return liveRoomService.getOne(queryWrapper);
+		});
+		if(Objects.isNull(one)){
             log.error("数据库中已没有多余的房间号了");
             throw new BusinessException(LiveRoomErrorCode.ROOM_FULL_FAIL);
         }

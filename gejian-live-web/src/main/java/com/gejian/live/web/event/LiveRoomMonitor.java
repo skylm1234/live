@@ -3,6 +3,7 @@ package com.gejian.live.web.event;
 import com.gejian.live.web.service.LiveRoomHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,6 +17,7 @@ public class LiveRoomMonitor {
 	@Autowired
 	private LiveRoomHelper liveRoomHelper;
 
+	@Async
 	@EventListener
 	public void run(LiveRoomEvent liveRoomEvent){
 
