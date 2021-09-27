@@ -152,6 +152,12 @@
 			<artifactId>ffmpeg-platform</artifactId>
 			<version>${ffmpeg.version}-${javacpp.version}</version>
 		</dependency>
+		<!-- xxl-job -->
+		<dependency>
+			<groupId>com.gejian</groupId>
+			<artifactId>gejian-xxl-job-client</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 

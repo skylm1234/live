@@ -13,7 +13,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author
  *
  */
-@EnablePigXxlJob
 @EnablePigSwagger2
 @EnableGeJianResourceServer
 @EnablePigFeignClients
