@@ -63,7 +63,7 @@ public class Anchor extends Model<Anchor> {
 	 * 0' COMMENT '是否删除，1-true-删除，0-false-未删除
 	 */
 	@TableField("deleted")
-	private Integer deleted;
+	private boolean deleted;
 
 
 

@@ -9,6 +9,7 @@ import com.gejian.live.web.service.LiveBulletChatService;
 import com.gejian.live.web.service.mq.producer.BulletChatProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author ：lijianghuai
@@ -21,6 +22,7 @@ public class LiveBulletChatServiceImpl extends ServiceImpl<LiveBulletChatMapper,
 	@Autowired
 	BulletChatProducer bulletChatProducer;
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public boolean save(LiveBulletChat entity) {
 		ACAutomationSearch.SearchResult searchResult = ACAutomationSearch.getInstance().search(entity.getContent(),new ReplacePolicy('*'));

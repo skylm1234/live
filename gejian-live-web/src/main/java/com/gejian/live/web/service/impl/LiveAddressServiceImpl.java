@@ -40,7 +40,7 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 	public PushFlowAddressResponseDTO getPushFlowAddress() {
 		final GeJianUser user = SecurityUtils.getUser();
 		AnchorRoom anchorRoom = anchorRoomService.getOne(Wrappers.lambdaQuery(AnchorRoom.class)
-				.eq(AnchorRoom::getDeleted, 0)
+				.eq(AnchorRoom::isDeleted, false)
 				.eq(AnchorRoom::getUserId, user.getId())
 				.last("limit 1"));
 		if (Objects.isNull(anchorRoom)){

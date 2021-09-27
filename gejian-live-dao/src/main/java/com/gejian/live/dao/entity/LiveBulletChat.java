@@ -26,6 +26,9 @@ public class LiveBulletChat extends Model<LiveBulletChat> {
     @TableField("content")
     private String content;
 
+	/**
+	 * 房间id
+	 */
 	@TableField("room_id")
 	private Integer roomId;
 
@@ -42,10 +45,10 @@ public class LiveBulletChat extends Model<LiveBulletChat> {
     private String nickname;
 
     /**
-     * 是否删除 1 已删除 0 未删除
+     * 是否删除
      */
     @TableField("deleted")
-    private String deleted;
+    private boolean deleted;
 
     /**
      * 创建时间

@@ -32,8 +32,8 @@ public class LiveAddressController {
 	 * @return
 	 */
 	@ApiOperation("获取推流端地址")
-	@GetMapping("/plug")
-	public R<PushFlowAddressResponseDTO> getPlugFlowAddress(){
+	@GetMapping("/push")
+	public R<PushFlowAddressResponseDTO> getPushFlowAddress(){
 		return R.ok(this.liveAddressService.getPushFlowAddress());
 	}
 

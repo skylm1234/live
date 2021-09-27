@@ -40,7 +40,7 @@ public class LiveConsumeFailedRecord implements Serializable {
     private LocalDateTime updateTime;
 
 	@TableField("deleted")
-    private Boolean deleted;
+    private boolean deleted;
 
 
 }

@@ -8,6 +8,7 @@ import com.gejian.live.dao.entity.LiveConsumeFailedRecord;
 import com.gejian.live.dao.mapper.LiveConsumeFailedMapper;
 import com.gejian.live.web.service.LiveConsumeFailedService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author ：lijianghuai
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LiveConsumeFailedServiceImpl extends ServiceImpl<LiveConsumeFailedMapper,LiveConsumeFailedRecord> implements LiveConsumeFailedService {
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public void saveRecord(String msgBody, Exception exception, LiveConsumeFailedType msgType) {
 		LiveConsumeFailedRecord record = new LiveConsumeFailedRecord();

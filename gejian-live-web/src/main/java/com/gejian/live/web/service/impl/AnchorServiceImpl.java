@@ -9,6 +9,7 @@ import com.gejian.live.dao.entity.Anchor;
 import com.gejian.live.dao.mapper.AnchorMapper;
 import com.gejian.live.web.service.AnchorService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author yuanxue
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnchorServiceImpl extends ServiceImpl<AnchorMapper, Anchor> implements AnchorService {
 
+	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Boolean saveAnchor(AnchorDTO anchorDTO) {
 		final GeJianUser user = SecurityUtils.getUser();
