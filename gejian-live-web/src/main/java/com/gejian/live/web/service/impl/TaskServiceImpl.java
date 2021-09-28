@@ -24,12 +24,12 @@ public class TaskServiceImpl implements TaskService {
 	private RemoteXxlJobService remoteXxlJobService;
 
 	@Override
-	public Integer addAndStart(Integer roomCode) {
+	public Integer addAndStart(Integer roomId) {
 		XxlJobInfoDTO xxlJobInfo = new XxlJobInfoDTO();
 		//执行器ID
 		xxlJobInfo.setJobGroup(6);
 		//任务描述
-		xxlJobInfo.setJobDesc("直播房间:" + roomCode + "的鉴黄定时任务");
+		xxlJobInfo.setJobDesc("直播房间:" + roomId + "的鉴黄定时任务");
 		//负责人
 		xxlJobInfo.setAuthor("admin");
 		//调度类型 固定值
@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
 		//JobHandler
 		xxlJobInfo.setExecutorHandler("testHandler");
 		//执行参数
-		xxlJobInfo.setExecutorParam(String.valueOf(roomCode));
+		xxlJobInfo.setExecutorParam(String.valueOf(roomId));
 		//执行器路由策略
 		xxlJobInfo.setExecutorRouteStrategy("FIRST");
 		//调度过期策略
@@ -59,10 +59,10 @@ public class TaskServiceImpl implements TaskService {
 		R<XxlJobInfoResponseDTO> response = remoteXxlJobService.addAndStart(xxlJobInfo, SecurityConstants.FROM_IN);
 		if (response.getCode() == 200) {
 			int jobId = response.getData().getJobId();
-			log.info("直播房间{}定时器启动成功，任务ID{}", roomCode, jobId);
+			log.info("直播房间{}定时器启动成功，任务ID{}", roomId, jobId);
 			return jobId;
 		} else {
-			log.info("直播房间{}定时器启动失败:{}", roomCode, response.getMsg());
+			log.info("直播房间{}定时器启动失败:{}", roomId, response.getMsg());
 		}
 		return null;
 	}

@@ -1,6 +1,7 @@
 package com.gejian.live.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gejian.common.core.exception.BusinessException;
 import com.gejian.live.common.dto.AnchorRoomDTO;
@@ -44,4 +45,13 @@ public class AnchorRoomServiceImpl extends ServiceImpl<AnchorRoomMapper, AnchorR
 		return this.save(anchorRoom);
 	}
 
+	@Override
+	public Boolean changeLiveStatus(Long userId, boolean roomLive) {
+		LambdaQueryWrapper<AnchorRoom> wrapper = new LambdaQueryWrapper<>();
+		wrapper.eq(AnchorRoom::getUserId, userId);
+		AnchorRoom anchorRoom = new AnchorRoom();
+		anchorRoom.setLiveStatus(roomLive);
+
+		return this.update(anchorRoom, wrapper);
+	}
 }

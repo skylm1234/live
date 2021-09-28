@@ -25,7 +25,7 @@ public class UserWatchOnlineSaveDTO {
 	 * 直播房间号
 	 */
 	@ApiModelProperty(value = "直播房间号")
-	private Integer roomCode;
+	private Integer roomId;
 
 	/**
 	 *

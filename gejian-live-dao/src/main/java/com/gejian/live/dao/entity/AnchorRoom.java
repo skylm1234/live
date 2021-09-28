@@ -37,7 +37,7 @@ public class AnchorRoom extends Model<AnchorRoom> {
 	private Integer roomId;
 
 	/**
-	 * 直播状态 
+	 * 直播状态  1/未开播，0/正在直播
 	 */
 	@TableField("live_status")
 	private Boolean liveStatus;
