@@ -1,6 +1,8 @@
 package com.gejian.live.web.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -32,11 +34,15 @@ public class LiveGiftServiceImpl extends ServiceImpl<LiveGiftMapper, LiveGift> i
 	@Override
 	public IPage<LiveGiftResponseDTO> queryLiveGiftList(LiveGiftPageDTO liveGiftPageDTO) {
 		Page<LiveGiftResponseDTO> page = new Page<>(liveGiftPageDTO.getCurrent(),liveGiftPageDTO.getSize());
-		List<LiveGift> liveGiftList = this.list(Wrappers.<LiveGift>query().lambda()
-					.eq(LiveGift::getDeleted,0)
-					.eq(LiveGift::getName, liveGiftPageDTO.getName())
-					.eq(LiveGift::getType, liveGiftPageDTO.getType())
-					.orderByAsc(LiveGift::getCreateTime));
+		LambdaQueryWrapper<LiveGift> wrapper = Wrappers.<LiveGift>lambdaQuery()
+				.eq(LiveGift::getDeleted, false);
+		if (StrUtil.isNotBlank(liveGiftPageDTO.getName())) {
+			wrapper.like(LiveGift::getName, liveGiftPageDTO.getName());
+		}
+		if (StrUtil.isNotBlank(liveGiftPageDTO.getType())) {
+			wrapper.eq(LiveGift::getType, liveGiftPageDTO.getType());
+		}
+		List<LiveGift> liveGiftList = this.list(wrapper);
 
 		List<LiveGiftResponseDTO> list = BeanUtil.copyToList(liveGiftList, LiveGiftResponseDTO.class);
 		return page.setRecords(list);
