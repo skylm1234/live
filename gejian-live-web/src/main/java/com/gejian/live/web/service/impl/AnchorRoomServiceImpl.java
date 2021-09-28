@@ -34,15 +34,12 @@ public class AnchorRoomServiceImpl extends ServiceImpl<AnchorRoomMapper, AnchorR
 	@Override
 	public Boolean saveAnchorRoom(AnchorRoomDTO anchorRoomDTO) {
 		Anchor anchor = Optional.ofNullable(anchorMapper.selectById(anchorRoomDTO.getAnchorId())).orElseThrow(() -> new BusinessException(NotFoundErrorCode.INSTANCE));
-		anchor.setStatus(1);
+		anchor.setStatus(anchorRoomDTO.getCheck());
 		anchorMapper.updateById(anchor);
 		AnchorRoom anchorRoom = BeanUtil.copyProperties(anchorRoomDTO, AnchorRoom.class);
 		anchorRoom.setUserId(anchor.getUserId());
 		anchorRoom.setRoomDescription(anchor.getRoomDescription());
 		anchorRoom.setRoomTitle(anchor.getRoomTitle());
-		//todo 默认状态为可直播状态
-		anchorRoom.setAnchorStatus(1);
-		anchorRoom.setLiveStatus(1);
 		anchorRoom.setRoomId(Integer.valueOf(liveRoomHelper.getRandomLiveRoom().getRoomId()));
 		return this.save(anchorRoom);
 	}

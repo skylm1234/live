@@ -41,6 +41,7 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		final GeJianUser user = SecurityUtils.getUser();
 		AnchorRoom anchorRoom = anchorRoomService.getOne(Wrappers.lambdaQuery(AnchorRoom.class)
 				.eq(AnchorRoom::isDeleted, false)
+				.eq(AnchorRoom::getLiveStatus,false)
 				.eq(AnchorRoom::getUserId, user.getId())
 				.last("limit 1"));
 		if (Objects.isNull(anchorRoom)){
@@ -60,8 +61,11 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(pullFlowAddressDTO.getRoomId().toString(), ValidType.PULL);
 		String rtmpUrl = serverComponent.getRtmpUrl();
 		String hlsUrl = serverComponent.getm3u8Url(pullFlowAddressDTO.getRoomId().toString());
-		addressDTO.setRtmpAddress(rtmpUrl + "/" + pullFlowAddressDTO.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "?" + TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
-		addressDTO.setHlsAddress(hlsUrl + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "?" + TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
+		final GeJianUser user = SecurityUtils.getUser();
+		addressDTO.setRtmpAddress(rtmpUrl + "/" + pullFlowAddressDTO.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&"
+				+ TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp() + "&" + TokenConstants.USERWATCHID + "=" + user.getId());
+		addressDTO.setHlsAddress(hlsUrl + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&" + TokenConstants.EXPIRETIMESTAMP + "="
+				+ tokenEntity.getExpireTimestamp() + "&" + TokenConstants.USERWATCHID + "=" + user.getId());
 		return addressDTO;
 	}
 }

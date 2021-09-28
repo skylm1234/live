@@ -10,4 +10,9 @@ public interface TokenConstants {
 	String TOKEN="token";
 
 	String EXPIRETIMESTAMP="expireTimestamp";
+
+	/**
+	 * 观看者用户id
+	 */
+	String USERWATCHID = "userWatchId";
 }

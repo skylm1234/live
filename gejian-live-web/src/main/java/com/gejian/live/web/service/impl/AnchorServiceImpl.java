@@ -25,7 +25,6 @@ public class AnchorServiceImpl extends ServiceImpl<AnchorMapper, Anchor> impleme
 		final GeJianUser user = SecurityUtils.getUser();
 		Anchor anchor = BeanUtil.copyProperties(anchorDTO, Anchor.class);
 		anchor.setUserId(user.getId());
-		anchor.setStatus(0);
 		return this.save(anchor);
 	}
 }

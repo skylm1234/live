@@ -46,7 +46,7 @@ public class Anchor extends Model<Anchor> {
 	 * 申请状态 0待审核 1审核成功 2审核失败
 	 */
 	@TableField("status")
-	private Integer status;
+	private String status;
 
 	/**
 	 * 申请时间
