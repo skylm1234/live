@@ -1,10 +1,10 @@
 package com.gejian.live.common.dto.gift;
 
-import com.gejian.common.core.util.BasePageQuery;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2021-09-28
  */
 @Data
-public class LiveGiftDelDTO extends BasePageQuery {
+public class LiveGiftDelDTO implements Serializable {
 
 	/**
 	 * 主键
