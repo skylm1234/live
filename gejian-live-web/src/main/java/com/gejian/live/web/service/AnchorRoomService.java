@@ -7,7 +7,7 @@ import com.gejian.live.dao.entity.AnchorRoom;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author yuanxue
@@ -17,9 +17,11 @@ public interface AnchorRoomService extends IService<AnchorRoom> {
 
 	/**
 	 * 保存主播房间信息
+	 *
 	 * @param anchorRoomDTO 申请信息
 	 * @return
 	 */
 	Boolean saveAnchorRoom(AnchorRoomDTO anchorRoomDTO);
 
+	Boolean changeLiveStatus(Long userId, boolean roomLive);
 }

@@ -25,8 +25,8 @@ public class StreamerOnline {
 	/**
 	 * 主播房间编号
 	 */
-	@TableField("room_code")
-	private Integer roomCode;
+	@TableField("room_id")
+	private Integer roomId;
 
 	/**
 	 * 封面文件存储key
@@ -39,6 +39,12 @@ public class StreamerOnline {
 	 */
 	@TableField("room_cover_file_bucket_name")
 	private String roomCoverFileBucketName;
+
+	/**
+	 * 是否自己设置封面 1-true自己设置，0-false定时截图
+	 */
+	@TableField("room_cover_type")
+	private Boolean roomCoverType;
 
 	/**
 	 * 

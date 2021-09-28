@@ -11,7 +11,7 @@ public class StreamerOnlineAdd {
 
 	private Long userId;
 
-	private Integer roomCode;
+	private Integer roomId;
 
 	private String clientId;
 

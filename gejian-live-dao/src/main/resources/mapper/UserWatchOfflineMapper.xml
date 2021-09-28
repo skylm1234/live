@@ -7,7 +7,7 @@
     <resultMap id="UserWatchOfflineRM" type="com.gejian.live.dao.entity.UserWatchOffline">
 		<result property="id" column="id"/>
 		<result property="userId" column="user_id"/>
-		<result property="roomCode" column="room_code"/>
+		<result property="roomId" column="room_id"/>
 		<result property="clientId" column="client_id"/>
 		<result property="ip" column="ip"/>
 		<result property="createTime" column="create_time"/>
@@ -16,7 +16,7 @@
 
     <!-- all sql columns -->
     <sql id="columns">
-         `id`,`user_id`,`room_code`,`client_id`,`ip`,`create_time`,`end_time`
+         `id`,`user_id`,`room_id`,`client_id`,`ip`,`create_time`,`end_time`
 	</sql>
 
 </mapper>

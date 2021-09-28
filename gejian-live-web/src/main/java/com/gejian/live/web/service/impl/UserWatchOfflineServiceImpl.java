@@ -26,21 +26,19 @@ public class UserWatchOfflineServiceImpl extends ServiceImpl<UserWatchOfflineMap
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Boolean saveUserWatchOffline(Long userId, Integer roomCode) {
-		UserWatchOnline userWatchOnline = userWatchOnlineService.findByUserIdAndRoomCode(userId, roomCode);
+	public Boolean saveUserWatchOffline(Long userId, Integer roomId) {
+		UserWatchOnline userWatchOnline = userWatchOnlineService.findByUserIdAndRoomCode(userId, roomId);
 
 		UserWatchOffline userWatchOffline = new UserWatchOffline();
 		userWatchOffline.setUserId(userWatchOnline.getUserId());
 		userWatchOffline.setClientId(userWatchOnline.getClientId());
 		userWatchOffline.setCreateTime(userWatchOnline.getCreateTime());
 		userWatchOffline.setIp(userWatchOnline.getIp());
-		userWatchOffline.setRoomCode(userWatchOnline.getRoomCode());
+		userWatchOffline.setRoomId(userWatchOnline.getRoomId());
 
 		//保存历史记录
 		this.save(userWatchOffline);
 		//删除线上记录
-		boolean result = userWatchOnlineService.removeById(userWatchOnline.getId());
-
-		return result;
+		return userWatchOnlineService.removeById(userWatchOnline.getId());
 	}
 }

@@ -25,8 +25,8 @@ public class UserWatchOnline {
 	/**
 	 * 房间号
 	 */
-	@TableField("room_code")
-	private Integer roomCode;
+	@TableField("room_id")
+	private Integer roomId;
 
 	/**
 	 * 

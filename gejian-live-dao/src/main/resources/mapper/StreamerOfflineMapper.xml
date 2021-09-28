@@ -7,9 +7,10 @@
     <resultMap id="StreamerOfflineRM" type="com.gejian.live.dao.entity.StreamerOffline">
 		<result property="id" column="id"/>
 		<result property="userId" column="user_id"/>
-		<result property="roomCode" column="room_code"/>
+		<result property="roomId" column="room_id"/>
 		<result property="roomCoverFileName" column="room_cover_file_name"/>
 		<result property="roomCoverFileBucketName" column="room_cover_file_bucket_name"/>
+		<result property="roomCoverType" column="room_cover_type" />
 		<result property="clientId" column="client_id"/>
 		<result property="ip" column="ip"/>
 		<result property="createTime" column="create_time"/>
@@ -18,7 +19,7 @@
 
     <!-- all sql columns -->
     <sql id="columns">
-         `id`,`user_id`,`room_code`,`room_cover_file_name`,`room_cover_file_bucket_name`,`client_id`,`ip`,`create_time`,`end_time`
+         `id`,`user_id`,`room_id`,`room_cover_file_name`,`room_cover_file_bucket_name`,`room_cover_type`,``client_id`,`ip`,`create_time`,`end_time`
 	</sql>
 
 </mapper>

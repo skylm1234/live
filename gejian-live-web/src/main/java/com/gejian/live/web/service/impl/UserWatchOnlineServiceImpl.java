@@ -29,9 +29,9 @@ public class UserWatchOnlineServiceImpl extends ServiceImpl<UserWatchOnlineMappe
 	}
 
 	@Override
-	public UserWatchOnline findByUserIdAndRoomCode(Long userId, Integer roomCode) {
+	public UserWatchOnline findByUserIdAndRoomCode(Long userId, Integer roomId) {
 		LambdaQueryWrapper<UserWatchOnline> wrapper = new LambdaQueryWrapper<>();
-		wrapper.eq(UserWatchOnline::getRoomCode, roomCode)
+		wrapper.eq(UserWatchOnline::getRoomId, roomId)
 				.eq(UserWatchOnline::getUserId, userId);
 		return this.getOne(wrapper);
 	}

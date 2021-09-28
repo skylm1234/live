@@ -13,5 +13,5 @@ public interface UserWatchOnlineService extends IService<UserWatchOnline> {
 
 	Boolean saveUserWatchOnline(UserWatchOnlineSaveDTO userWatchOnlineSaveDTO);
 
-	UserWatchOnline findByUserIdAndRoomCode(Long userId, Integer roomCode);
+	UserWatchOnline findByUserIdAndRoomCode(Long userId, Integer roomId);
 }
