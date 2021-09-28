@@ -40,13 +40,13 @@ public class AnchorRoom extends Model<AnchorRoom> {
 	 * 直播状态 
 	 */
 	@TableField("live_status")
-	private Integer liveStatus;
+	private Boolean liveStatus;
 
 	/**
 	 * 主播状态
 	 */
 	@TableField("anchor_status")
-	private Integer anchorStatus;
+	private Boolean anchorStatus;
 
 	/**
 	 * 房间描述
