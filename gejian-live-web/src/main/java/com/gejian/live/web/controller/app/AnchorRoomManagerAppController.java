@@ -69,8 +69,10 @@ public class AnchorRoomManagerAppController {
 	public Boolean delete(@RequestBody @Valid RoomManagerIdDTO roomManagerIdDTO, @CurrentUser GeJianUser geJianUser){
 		AnchorRoomManager anchorRoomManager = new AnchorRoomManager();
 		anchorRoomManager.setDeleted(true);
-		anchorRoomManager.setId(roomManagerIdDTO.getId());
-		return this.anchorRoomManagerService.updateById(anchorRoomManager);
+		return this.anchorRoomManagerService.update(anchorRoomManager,Wrappers.lambdaQuery(AnchorRoomManager.class)
+				.eq(AnchorRoomManager::getAnchorId,geJianUser.getId())
+				.eq(AnchorRoomManager::getId,roomManagerIdDTO.getId())
+		);
 	}
 
 
