@@ -13,12 +13,10 @@ import com.gejian.live.common.enums.error.LiveGiftErrorCode;
 import com.gejian.live.dao.entity.LiveGift;
 import com.gejian.live.dao.mapper.LiveGiftMapper;
 import com.gejian.live.web.service.LiveGiftService;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * <p>
@@ -51,16 +49,24 @@ public class LiveGiftServiceImpl extends ServiceImpl<LiveGiftMapper, LiveGift> i
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Boolean saveLiveGift(LiveGiftSaveDTO liveGiftSaveDTO) {
+	public void saveLiveGift(LiveGiftSaveDTO liveGiftSaveDTO) {
 		LiveGift liveGift = BeanUtil.copyProperties(liveGiftSaveDTO, LiveGift.class);
-		return Optional.ofNullable(this.save(liveGift)).orElseThrow(() ->  new BusinessException(LiveGiftErrorCode.NAME_REPEAT_FAIL));
+		try {
+			baseMapper.insert(liveGift);
+		}catch (DuplicateKeyException e){
+			throw new BusinessException(LiveGiftErrorCode.NAME_REPEAT_FAIL);
+		}
 	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Boolean updateLiveGift(LiveGiftUpdateDTO liveGiftUpdateDTO) {
+	public void updateLiveGift(LiveGiftUpdateDTO liveGiftUpdateDTO) {
 		LiveGift liveGift = BeanUtil.copyProperties(liveGiftUpdateDTO, LiveGift.class);
-		return Optional.ofNullable(this.updateById(liveGift)).orElseThrow(() -> new BusinessException(LiveGiftErrorCode.UPDATE_FAIL));
+		try {
+			baseMapper.updateById(liveGift);
+		}catch (DuplicateKeyException e){
+			throw new BusinessException(LiveGiftErrorCode.UPDATE_FAIL);
+		}
 	}
 
 	@Override

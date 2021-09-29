@@ -27,14 +27,14 @@ public interface LiveGiftService extends IService<LiveGift> {
 	 * @param liveGiftSaveDTO 直播间礼物dto
 	 * @return boolean
 	 */
-	Boolean saveLiveGift(LiveGiftSaveDTO liveGiftSaveDTO);
+	void saveLiveGift(LiveGiftSaveDTO liveGiftSaveDTO);
 
 	/**
 	 * 直播间礼物修改
 	 * @param liveGiftUpdateDTO 直播间礼物dto
 	 * @return boolean
 	 */
-	Boolean updateLiveGift(LiveGiftUpdateDTO liveGiftUpdateDTO);
+	void updateLiveGift(LiveGiftUpdateDTO liveGiftUpdateDTO);
 
 	/**
 	 * 直播间礼物删除

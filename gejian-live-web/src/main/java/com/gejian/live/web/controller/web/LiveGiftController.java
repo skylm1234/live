@@ -44,23 +44,25 @@ public class LiveGiftController {
 	/**
 	 * 直播间礼物新增接口
 	 * @param liveGiftSaveDTO 直播间礼物dto
-	 * @return boolean
+	 * @return void
 	 */
 	@ApiOperation("直播间礼物新增接口")
 	@PostMapping("/save")
 	public R saveLiveGift(@Valid @RequestBody LiveGiftSaveDTO liveGiftSaveDTO){
-		return R.ok(this.liveGiftService.saveLiveGift(liveGiftSaveDTO));
+		this.liveGiftService.saveLiveGift(liveGiftSaveDTO);
+		return R.ok();
 	}
 
 	/**
 	 * 直播间礼物修改接口
 	 * @param liveGiftUpdateDTO 直播间礼物修改dto
-	 * @return boolean
+	 * @return void
 	 */
 	@ApiOperation("直播间礼物新增接口")
 	@PostMapping("/update")
 	public R updateLiveGift(@Valid @RequestBody LiveGiftUpdateDTO liveGiftUpdateDTO){
-		return R.ok(this.liveGiftService.updateLiveGift(liveGiftUpdateDTO));
+		this.liveGiftService.updateLiveGift(liveGiftUpdateDTO);
+		return R.ok();
 	}
 
 	/**
