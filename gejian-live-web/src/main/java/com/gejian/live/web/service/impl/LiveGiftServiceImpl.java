@@ -15,6 +15,7 @@ import com.gejian.live.dao.mapper.LiveGiftMapper;
 import com.gejian.live.web.service.LiveGiftService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,6 @@ public class LiveGiftServiceImpl extends ServiceImpl<LiveGiftMapper, LiveGift> i
 
 	@Override
 	public IPage<LiveGiftResponseDTO> queryLiveGiftList(LiveGiftPageDTO liveGiftPageDTO) {
-		Page<LiveGiftResponseDTO> page = new Page<>(liveGiftPageDTO.getCurrent(),liveGiftPageDTO.getSize());
 		LambdaQueryWrapper<LiveGift> wrapper = Wrappers.<LiveGift>lambdaQuery()
 				.eq(LiveGift::getDeleted, false);
 		if (StrUtil.isNotBlank(liveGiftPageDTO.getName())) {
@@ -42,10 +42,11 @@ public class LiveGiftServiceImpl extends ServiceImpl<LiveGiftMapper, LiveGift> i
 		if (StrUtil.isNotBlank(liveGiftPageDTO.getType())) {
 			wrapper.eq(LiveGift::getType, liveGiftPageDTO.getType());
 		}
-		List<LiveGift> liveGiftList = this.list(wrapper);
-
-		List<LiveGiftResponseDTO> list = BeanUtil.copyToList(liveGiftList, LiveGiftResponseDTO.class);
-		return page.setRecords(list);
+		Page<LiveGift> page = baseMapper.selectPage(liveGiftPageDTO.getPage(), wrapper);
+		if (CollectionUtils.isEmpty(page.getRecords())){
+			return new Page<>();
+		}
+		return page.convert(liveGift -> BeanUtil.copyProperties(liveGift, LiveGiftResponseDTO.class));
 	}
 
 	@Override
