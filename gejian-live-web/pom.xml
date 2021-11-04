@@ -53,33 +53,28 @@
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-security</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 		<!--日志处理-->
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-log</artifactId>
-			<version>1.0.1</version>
 		</dependency>
 
 		<!--mybatis 模块-->
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-mybatis</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 
 		<!--接口文档-->
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-swagger</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-mq</artifactId>
-			<version>1.0.3</version>
 		</dependency>
 
 		<!--注册中心客户端-->
@@ -130,7 +125,6 @@
 		<dependency>
 			<groupId>com.gejian</groupId>
 			<artifactId>gejian-common-job</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 
 		<!--测试依赖-->
