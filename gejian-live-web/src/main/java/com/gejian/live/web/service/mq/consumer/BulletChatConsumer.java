@@ -50,8 +50,9 @@ public class BulletChatConsumer extends AbstractRocketMQListener<LiveBulletChat>
 	}
 
 	@Override
-	protected void onError(LiveBulletChat liveBulletChat, Exception e) {
+	protected void onError(LiveBulletChat liveBulletChat, String msgId, String topic, Throwable e) {
 		String jsonStr = JSONUtil.toJsonPrettyStr(liveBulletChat);
 		liveConsumeFailedService.saveRecord(jsonStr, e, LiveConsumeFailedType.SEND_BULLET);
 	}
+
 }

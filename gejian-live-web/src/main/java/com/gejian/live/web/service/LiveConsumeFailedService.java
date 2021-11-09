@@ -17,6 +17,6 @@ public interface LiveConsumeFailedService extends IService<LiveConsumeFailedReco
 	 * @param exception
 	 * @param msgType
 	 */
-	void saveRecord(String msgBody, Exception exception, LiveConsumeFailedType msgType);
+	void saveRecord(String msgBody, Throwable exception, LiveConsumeFailedType msgType);
 
 }

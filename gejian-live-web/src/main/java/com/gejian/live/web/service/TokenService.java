@@ -120,8 +120,7 @@ public class TokenService {
 			//获取redis的Token原字符串 重新加密字符串
 			Long expire = stringRedisTemplate.opsForValue().getOperations().getExpire(redisTokenKey);
 			Long limit=System.currentTimeMillis()+expire*1000;
-			TokenEntity tokenEntity = buildToken(originToken, limit);
-			return tokenEntity;
+			return buildToken(originToken, limit);
 		}
 		return null;
 	}

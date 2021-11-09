@@ -21,7 +21,7 @@ public class LiveConsumeFailedServiceImpl extends ServiceImpl<LiveConsumeFailedM
 
 	@Transactional(rollbackFor = Exception.class)
 	@Override
-	public void saveRecord(String msgBody, Exception exception, LiveConsumeFailedType msgType) {
+	public void saveRecord(String msgBody, Throwable exception, LiveConsumeFailedType msgType) {
 		LiveConsumeFailedRecord record = new LiveConsumeFailedRecord();
 		record.setMsgBody(msgBody);
 		record.setMsgType(msgType);
