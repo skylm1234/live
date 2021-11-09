@@ -43,12 +43,12 @@ public class StreamerOfflineServiceImpl extends ServiceImpl<StreamerOfflineMappe
 	private StringRedisTemplate redisTemplate;
 
 	@Override
-	public void StreamerEnd(Long userId) {
+	public void StreamerEnd(Integer roomId) {
 		//修改直播状态为未开播
-		anchorRoomService.changeLiveStatus(userId, false);
+		anchorRoomService.changeLiveStatus(roomId, false);
 
 		//将线上播放记录拷贝到历史播放记录
-		StreamerOnline streamerOnline = streamerOnlineService.getByUserId(userId);
+		StreamerOnline streamerOnline = streamerOnlineService.getByUserId(roomId);
 		saveStreamerOffline(streamerOnline);
 	}
 
@@ -56,7 +56,6 @@ public class StreamerOfflineServiceImpl extends ServiceImpl<StreamerOfflineMappe
 	@Transactional(rollbackFor = Exception.class)
 	public Boolean saveStreamerOffline(StreamerOnline streamerOnline) {
 		StreamerOffline offline = new StreamerOffline();
-		offline.setUserId(streamerOnline.getUserId());
 		offline.setRoomId(streamerOnline.getRoomId());
 		offline.setClientId(streamerOnline.getClientId());
 		offline.setIp(streamerOnline.getIp());

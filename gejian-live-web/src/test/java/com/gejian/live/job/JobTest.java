@@ -1,11 +1,8 @@
 package com.gejian.live.job;
 
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.gejian.live.web.GeJianLiveWebApplication;
+import com.gejian.live.web.LiveWebApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +15,7 @@ import java.util.Map;
  * @Author:chen
  * @Date: 2021/9/26 10:24
  */
-@SpringBootTest(classes = GeJianLiveWebApplication.class)
+@SpringBootTest(classes = LiveWebApplication.class)
 @Slf4j
 public class JobTest {
 

@@ -22,10 +22,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableDiscoveryClient
 @SpringBootApplication
 @MapperScan("com.gejian.live.dao.mapper")
-public class GeJianLiveWebApplication {
+public class LiveWebApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GeJianLiveWebApplication.class, args);
+		SpringApplication.run(LiveWebApplication.class, args);
 	}
 
 }

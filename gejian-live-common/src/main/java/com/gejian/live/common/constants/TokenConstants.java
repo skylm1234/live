@@ -7,9 +7,9 @@ package com.gejian.live.common.constants;
  */
 public interface TokenConstants {
 
-	String TOKEN="token";
+	String TOKEN = "token";
 
-	String EXPIRETIMESTAMP="expireTimestamp";
+	String TIMESTAMP = "timestamp";
 
 	/**
 	 * 观看者用户id

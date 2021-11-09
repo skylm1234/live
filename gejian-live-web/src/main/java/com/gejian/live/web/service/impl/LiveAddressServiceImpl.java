@@ -51,7 +51,7 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		TokenEntity tokenEntity = tokenService.generateTokenSalt(anchorRoom.getRoomId().toString(), ValidType.PUSH);
 		PushFlowAddressResponseDTO addressDTO = new PushFlowAddressResponseDTO();
 		addressDTO.setAddress(address);
-		addressDTO.setStreamingCode(anchorRoom.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&" + TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
+		addressDTO.setStreamingCode(anchorRoom.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&" + TokenConstants.TIMESTAMP + "=" + tokenEntity.getExpireTimestamp());
 		return addressDTO;
 	}
 
@@ -63,8 +63,8 @@ public class LiveAddressServiceImpl implements LiveAddressService {
 		String hlsUrl = serverComponent.getm3u8Url(pullFlowAddressDTO.getRoomId().toString());
 		final GeJianUser user = SecurityUtils.getUser();
 		addressDTO.setRtmpAddress(rtmpUrl + "/" + pullFlowAddressDTO.getRoomId() + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&"
-				+ TokenConstants.EXPIRETIMESTAMP + "=" + tokenEntity.getExpireTimestamp() + "&" + TokenConstants.USERWATCHID + "=" + user.getId());
-		addressDTO.setHlsAddress(hlsUrl + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&" + TokenConstants.EXPIRETIMESTAMP + "="
+				+ TokenConstants.TIMESTAMP + "=" + tokenEntity.getExpireTimestamp() + "&" + TokenConstants.USERWATCHID + "=" + user.getId());
+		addressDTO.setHlsAddress(hlsUrl + "?" + TokenConstants.TOKEN + "=" + tokenEntity.getToken() + "&" + TokenConstants.TIMESTAMP + "="
 				+ tokenEntity.getExpireTimestamp() + "&" + TokenConstants.USERWATCHID + "=" + user.getId());
 		return addressDTO;
 	}

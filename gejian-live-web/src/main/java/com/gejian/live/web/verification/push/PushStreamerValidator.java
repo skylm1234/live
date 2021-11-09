@@ -33,7 +33,7 @@ public class PushStreamerValidator extends AbstractValidator {
 
 		int count = anchorRoomService.count(Wrappers.lambdaQuery(AnchorRoom.class)
 				.eq(AnchorRoom::isDeleted, false)
-				.eq(AnchorRoom::getAnchorStatus, false)
+				.eq(AnchorRoom::getAnchorStatus, true)
 				.eq(AnchorRoom::getLiveStatus, false)
 				.eq(AnchorRoom::getRoomId, request.getRoomId())
 		);

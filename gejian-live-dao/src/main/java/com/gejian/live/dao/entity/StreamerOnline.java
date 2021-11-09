@@ -17,12 +17,6 @@ public class StreamerOnline {
 	private Long id;
 
 	/**
-	 * 主播用户ID
-	 */
-	@TableField("user_id")
-	private Long userId;
-
-	/**
 	 * 主播房间编号
 	 */
 	@TableField("room_id")

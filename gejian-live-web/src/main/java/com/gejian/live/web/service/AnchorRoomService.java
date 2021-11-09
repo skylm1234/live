@@ -23,5 +23,5 @@ public interface AnchorRoomService extends IService<AnchorRoom> {
 	 */
 	Boolean saveAnchorRoom(AnchorRoomDTO anchorRoomDTO);
 
-	Boolean changeLiveStatus(Long userId, boolean roomLive);
+	Boolean changeLiveStatus(Integer roomId, boolean roomLive);
 }

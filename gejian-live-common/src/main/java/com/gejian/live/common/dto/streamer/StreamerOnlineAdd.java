@@ -9,8 +9,6 @@ import lombok.Data;
 @Data
 public class StreamerOnlineAdd {
 
-	private Long userId;
-
 	private Integer roomId;
 
 	private String clientId;

@@ -9,7 +9,7 @@ import com.gejian.live.dao.entity.StreamerOnline;
  */
 public interface StreamerOnlineService extends IService<StreamerOnline> {
 
-	void StreamerStart(Long userId, String clientId, String ip, Integer roomCode);
+	void StreamerStart(String clientId, String ip, Integer roomCode);
 
 	/**
 	 * 添加主播线上直播记录
@@ -20,9 +20,9 @@ public interface StreamerOnlineService extends IService<StreamerOnline> {
 	Boolean saveStreamerOnline(StreamerOnlineAdd streamerOnlineAdd);
 
 	/**
-	 * 根据userId获取线上直播信息
+	 * 根据房间号获取线上直播信息
 	 */
-	StreamerOnline getByUserId(Long userId);
+	StreamerOnline getByUserId(Integer roomId);
 
 	/**
 	 * 根据房间号获取直播信息

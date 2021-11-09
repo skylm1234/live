@@ -9,7 +9,7 @@ import com.gejian.live.dao.entity.StreamerOnline;
  */
 public interface StreamerOfflineService extends IService<StreamerOffline> {
 	//主播结束直播
-	void StreamerEnd(Long userId);
+	void StreamerEnd(Integer roomId);
 
 	//添加主播线上直播记录
 	Boolean saveStreamerOffline(StreamerOnline streamerOnline);

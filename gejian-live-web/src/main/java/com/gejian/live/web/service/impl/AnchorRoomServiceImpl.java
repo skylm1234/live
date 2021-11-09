@@ -46,9 +46,9 @@ public class AnchorRoomServiceImpl extends ServiceImpl<AnchorRoomMapper, AnchorR
 	}
 
 	@Override
-	public Boolean changeLiveStatus(Long userId, boolean roomLive) {
+	public Boolean changeLiveStatus(Integer roomId, boolean roomLive) {
 		LambdaQueryWrapper<AnchorRoom> wrapper = new LambdaQueryWrapper<>();
-		wrapper.eq(AnchorRoom::getUserId, userId);
+		wrapper.eq(AnchorRoom::getRoomId, roomId);
 		AnchorRoom anchorRoom = new AnchorRoom();
 		anchorRoom.setLiveStatus(roomLive);
 

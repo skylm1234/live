@@ -31,13 +31,12 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 	private StringRedisTemplate redisTemplate;
 
 	@Override
-	public void StreamerStart(Long userId, String clientId, String ip, Integer roomId) {
+	public void StreamerStart(String clientId, String ip, Integer roomId) {
 		//主播开始直播 修改直播房间直播状态
-		anchorRoomService.changeLiveStatus(userId, true);
+		anchorRoomService.changeLiveStatus(roomId, true);
 
 		//添加主播直播线上记录
 		StreamerOnlineAdd streamerOnlineAdd = new StreamerOnlineAdd();
-		streamerOnlineAdd.setUserId(userId);
 		streamerOnlineAdd.setIp(ip);
 		streamerOnlineAdd.setClientId(clientId);
 		streamerOnlineAdd.setRoomId(roomId);
@@ -51,7 +50,6 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 		streamerOnline.setClientId(streamerOnlineAdd.getClientId());
 		streamerOnline.setIp(streamerOnlineAdd.getIp());
 		streamerOnline.setRoomId(streamerOnlineAdd.getRoomId());
-		streamerOnline.setUserId(streamerOnlineAdd.getUserId());
 		//TODO 设置是否手动设置封面,默认设置按照截图方式
 		streamerOnline.setRoomCoverType(false);
 
@@ -68,10 +66,10 @@ public class StreamerOnlineServiceImpl extends ServiceImpl<StreamerOnlineMapper,
 	}
 
 	@Override
-	public StreamerOnline getByUserId(Long userId) {
+	public StreamerOnline getByUserId(Integer roomId) {
 
 		LambdaQueryWrapper<StreamerOnline> wrapper = new LambdaQueryWrapper<>();
-		wrapper.eq(StreamerOnline::getUserId, userId);
+		wrapper.eq(StreamerOnline::getRoomId, roomId);
 
 		return this.getOne(wrapper);
 	}
